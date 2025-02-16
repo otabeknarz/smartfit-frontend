@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_BASE_URL } from '@/constants/api';
+import { API_BASE_URL, API_URLS } from '@/constants/api';
 
 const instance = axios.create({
   baseURL: API_BASE_URL,
@@ -15,7 +15,7 @@ instance.interceptors.request.use(async (config) => {
   // Only get CSRF token for non-GET requests
   if (config.method !== 'get') {
     try {
-      const response = await axios.get('/api/users/get-csrf-token/');
+      const response = await axios.get(API_URLS.GET_CSRF_TOKEN);
       config.headers['X-CSRFToken'] = response.data.csrfToken;
     } catch (error) {
       console.error('Failed to get CSRF token:', error);
