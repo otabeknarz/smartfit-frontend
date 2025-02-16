@@ -41,8 +41,10 @@ instance.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
-      window.location.href = '/login';
+      // Close the Telegram WebApp
+      if (window.Telegram?.WebApp) {
+        // window.Telegram.WebApp.close();
+      }
     }
     return Promise.reject(error);
   }
