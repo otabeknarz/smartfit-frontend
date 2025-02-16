@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from '@/lib/axios';
 import { API_URLS } from '@/constants/api';
+import { TokenService } from '@/lib/tokenService';
 
 interface User {
   id: string;
@@ -38,8 +39,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const user = tg.initDataUnsafe?.user;
       if (user?.id) {
         try {
-          // Auto-login with Telegram user ID
-          await axios.post(API_URLS.LOGIN, { id: user.id.toString() });
+          const response = await axios.post(API_URLS.LOGIN, { 
+            id: user.id.toString() 
+          });
+          
+          TokenService.setTokens(response.data);
           await checkAuth();
         } catch (error) {
           console.error('Failed to login:', error);
@@ -51,11 +55,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const checkAuth = async () => {
+    const tokens = TokenService.getTokens();
+    if (!tokens) {
+      setUser(null);
+      setIsAuthenticated(false);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.get(API_URLS.GET_ME);
       setUser(response.data);
       setIsAuthenticated(true);
     } catch (error) {
+      TokenService.clearTokens();
       setUser(null);
       setIsAuthenticated(false);
     } finally {
@@ -65,7 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      await axios.get(API_URLS.LOGOUT);
+      await axios.post(API_URLS.LOGOUT);
+      TokenService.clearTokens();
       setUser(null);
       setIsAuthenticated(false);
     } catch (error) {

@@ -1,47 +1,84 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { API_BASE_URL, API_URLS } from '@/constants/api';
+import { TokenService } from './tokenService';
 
 const instance = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true,  // Important for CSRF
   headers: {
     'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest'
   }
 });
 
-// Add a request interceptor to get CSRF token before each request
-instance.interceptors.request.use(async (config) => {
-  // Only get CSRF token for non-GET requests
-  if (config.method !== 'get') {
-    try {
-      // Get CSRF token from cookie
-      const csrfToken = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('csrftoken='))
-        ?.split('=')[1];
+let isRefreshing = false;
+let failedQueue: any[] = [];
 
-      if (csrfToken) {
-        // Set the token in the header
-        config.headers['X-CSRFToken'] = csrfToken;
-      } else {
-        // If no token in cookie, get a new one
-        const response = await axios.get(API_URLS.GET_CSRF_TOKEN);
-        config.headers['X-CSRFToken'] = response.data.csrfToken;
-      }
-    } catch (error) {
-      console.error('Failed to get CSRF token:', error);
+const processQueue = (error: any | null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve();
     }
-  }
-  return config;
-});
+  });
+  failedQueue = [];
+};
 
-// Response interceptor
+// Add auth token to requests
+instance.interceptors.request.use(
+  async (config) => {
+    if (TokenService.isAccessTokenExpired()) {
+      if (!isRefreshing) {
+        isRefreshing = true;
+        const tokens = TokenService.getTokens();
+
+        if (tokens?.refresh) {
+          try {
+            const response = await axios.post(API_URLS.REFRESH_TOKEN, {
+              refresh: tokens.refresh
+            });
+            TokenService.setTokens(response.data);
+            processQueue(null);
+          } catch (error) {
+            processQueue(error);
+            TokenService.clearTokens();
+            if (window.Telegram?.WebApp) {
+              // window.Telegram.WebApp.close();
+            }
+            return Promise.reject(error);
+          } finally {
+            isRefreshing = false;
+          }
+        }
+      }
+
+      return new Promise((resolve, reject) => {
+        failedQueue.push({ resolve, reject });
+      }).then(() => {
+        const tokens = TokenService.getTokens();
+        if (tokens?.access) {
+          config.headers.Authorization = `Bearer ${tokens.access}`;
+        }
+        return config;
+      }).catch(error => {
+        return Promise.reject(error);
+      });
+    }
+
+    const tokens = TokenService.getTokens();
+    if (tokens?.access) {
+      config.headers.Authorization = `Bearer ${tokens.access}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Handle 401 responses
 instance.interceptors.response.use(
   (response) => response,
-  async (error) => {
+  async (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // Close the Telegram WebApp
+      TokenService.clearTokens();
       if (window.Telegram?.WebApp) {
         // window.Telegram.WebApp.close();
       }
