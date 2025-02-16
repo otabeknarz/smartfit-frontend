@@ -50,12 +50,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (userId: string) => {
-    console.log("Logging in... with user id: ", userId);
     try {
-      const csrfToken = await axios.get(API_URLS.GET_CSRF_TOKEN);
-      const response = await axios.post<LoginResponse>(API_URLS.LOGIN, 
-        { id: userId }, 
-        { headers: { 'X-CSRFToken': csrfToken.data.csrfToken } }
+      const response = await axios.post<LoginResponse>(
+        API_URLS.LOGIN, 
+        { id: userId }
       );
       
       await checkAuth();

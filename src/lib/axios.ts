@@ -1,35 +1,31 @@
 import axios from 'axios';
 import { API_BASE_URL } from '@/constants/api';
 
-const axiosInstance = axios.create({
+const instance = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true, // Important for cookies
+  withCredentials: true,  // Important for CSRF
   headers: {
     'Content-Type': 'application/json',
-  },
+    'X-Requested-With': 'XMLHttpRequest'
+  }
 });
 
-// Request interceptor
-axiosInstance.interceptors.request.use(
-  async (config) => {
-    // Get CSRF token from cookie if needed
-    const csrfToken = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('csrftoken='))
-      ?.split('=')[1];
-
-    if (csrfToken) {
-      config.headers['X-CSRFToken'] = csrfToken;
+// Add a request interceptor to get CSRF token before each request
+instance.interceptors.request.use(async (config) => {
+  // Only get CSRF token for non-GET requests
+  if (config.method !== 'get') {
+    try {
+      const response = await axios.get('/api/users/get-csrf-token/');
+      config.headers['X-CSRFToken'] = response.data.csrfToken;
+    } catch (error) {
+      console.error('Failed to get CSRF token:', error);
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
   }
-);
+  return config;
+});
 
 // Response interceptor
-axiosInstance.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
@@ -40,4 +36,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance; 
+export default instance; 
