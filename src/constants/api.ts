@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'http://localhost:8000/api/users';
+export const API_BASE_URL = 'https://smartfitapi.otabek.me/api/users';
 
 export const API_URLS = {
   // Auth endpoints
