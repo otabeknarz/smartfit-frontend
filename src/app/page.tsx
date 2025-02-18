@@ -16,7 +16,7 @@ export default function RootPage() {
       } else if (!user?.gender || !user?.age || !user?.height) {
         router.push('/onboarding');
       } else {
-        router.push('/');
+        router.push('/courses');
       }
     }
   }, [isLoading, isAuthenticated, user, router]);

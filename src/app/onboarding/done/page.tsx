@@ -16,7 +16,7 @@ export default function DonePage() {
     try {
       setIsSubmitting(true);
       await submitData();
-      router.push('/');
+      router.push('/courses');
     } catch (error) {
       console.error('Failed to save data:', error);
       setError('Something went wrong. Please try again.');
