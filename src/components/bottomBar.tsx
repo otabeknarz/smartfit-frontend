@@ -8,7 +8,7 @@ const bottomBarItems = [
   {
     icon: Home,
     label: "Home",
-    href: "/",
+    href: "/(protected)",
   },
   {
     icon: BookOpen,
