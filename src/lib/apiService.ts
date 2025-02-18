@@ -31,15 +31,20 @@ export interface Session {
   created_at: string;
 }
 
+export interface LoginResponse {
+  token: string;
+  has_registered_successfully: boolean;
+}
+
 export const AuthService = {
   login: async (telegramId: string) => {
     try {
-      const response = await axiosInstance.post('/users/login/', {
+      const response = await axiosInstance.post<LoginResponse>('/users/login/', {
         id: telegramId,
       });
-      const { token } = response.data;
+      const { token, has_registered_successfully } = response.data;
       TokenService.setToken(token);
-      return true;
+      return { success: true, has_registered_successfully };
     } catch (error) {
       console.error('Login error:', error);
       throw error;

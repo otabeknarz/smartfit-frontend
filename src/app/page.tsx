@@ -6,20 +6,20 @@ import { useAuth } from '@/contexts/AuthContext';
 import { LoadingScreen } from '@/components/LoadingScreen';
 
 export default function RootPage() {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isAuthenticated, isLoading, hasRegistered } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
         router.push('/login');
-      } else if (!user?.gender || !user?.age || !user?.height) {
+      } else if (!hasRegistered) {
         router.push('/onboarding');
       } else {
         router.push('/courses');
       }
     }
-  }, [isLoading, isAuthenticated, user, router]);
+  }, [isLoading, isAuthenticated, hasRegistered, router]);
 
   return <LoadingScreen />;
 } 
