@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { TokenService } from './tokenService';
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = 'https://smartfitapi.otabek.me/api';
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',

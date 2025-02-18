@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from 'react';
-import axios from '@/lib/axios';
+import { axiosInstance } from '@/lib/apiService';
 import { API_URLS } from '@/constants/api';
 import { useRouter } from 'next/navigation';
 import { useAuth } from './AuthContext';
@@ -45,7 +45,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      await axios.post(API_URLS.UPDATE_USER(user.id), data);
+      await axiosInstance.post(API_URLS.UPDATE_USER(user.id), data);
       router.push('/');
     } catch (error) {
       console.error('Failed to update user data:', error);
