@@ -3,12 +3,15 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from '@/contexts/AuthContext';
 import { OnboardingProvider } from '@/contexts/OnboardingContext';
+import { Inter } from 'next/font/google';
 
 const poppinsFont = Poppins({
   weight: ["400", "500", "700"],
   subsets: ["latin"],
   variable: "--font-poppins",
 });
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: "SmartFit",
@@ -26,7 +29,7 @@ export default function RootLayout({
         <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
       </head>
       <body
-        className={`${poppinsFont.variable} antialiased font-[family-name:var(--font-poppins)]`}
+        className={`${poppinsFont.variable} antialiased font-[family-name:var(--font-poppins)] ${inter.className}`}
       >
         <AuthProvider>
           <OnboardingProvider>

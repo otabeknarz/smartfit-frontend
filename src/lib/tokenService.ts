@@ -1,6 +1,5 @@
-interface Tokens {
-  access: string;
-  refresh: string;
+interface Token {
+  token: string;
 }
 
 interface DecodedToken {
@@ -9,31 +8,27 @@ interface DecodedToken {
 }
 
 export const TokenService = {
-  getTokens: (): Tokens | null => {
-    const access = localStorage.getItem('accessToken');
-    const refresh = localStorage.getItem('refreshToken');
-    return access && refresh ? { access, refresh } : null;
-  },
-
-  setTokens: (tokens: Tokens) => {
-    localStorage.setItem('accessToken', tokens.access);
-    localStorage.setItem('refreshToken', tokens.refresh);
-  },
-
-  clearTokens: () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-  },
-
-  isAccessTokenExpired: (): boolean => {
-    const tokens = TokenService.getTokens();
-    if (!tokens?.access) return true;
-
-    try {
-      const decoded = JSON.parse(atob(tokens.access.split('.')[1])) as DecodedToken;
-      return decoded.exp * 1000 < Date.now();
-    } catch {
-      return true;
+  getToken: (): string | null => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('token');
     }
+    return null;
+  },
+
+  setToken: (token: string) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', token);
+    }
+  },
+
+  clearToken: () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
+  },
+
+  // This method might not be needed since DRF tokens don't expire
+  isTokenValid: (): boolean => {
+    return !!TokenService.getToken();
   }
 }; 
