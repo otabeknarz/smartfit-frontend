@@ -7,6 +7,7 @@ import { TokenService } from '@/lib/tokenService';
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  isLoading: boolean;
   user: any | null;
   login: (telegramId: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -16,12 +17,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<any | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     // Check authentication status on mount
     setIsAuthenticated(!!TokenService.getToken());
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -55,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

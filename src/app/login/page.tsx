@@ -5,21 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-declare global {
-  interface Window {
-    Telegram?: {
-      WebApp?: {
-        initData: string;
-        initDataUnsafe: {
-          user?: {
-            id: number;
-          };
-        };
-      };
-    };
-  }
-}
-
 export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
   const router = useRouter();

@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import axios from '@/lib/axios';
+import { axiosInstance as axios } from '@/lib/apiService';
 import { API_URLS } from '@/constants/api';
 
 interface Session {
@@ -101,7 +101,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-center gap-4 pb-6 border-b">
               <Avatar className="h-24 w-24 border-2 border-primary/10">
                 <AvatarFallback className="bg-primary/10 text-primary text-2xl">
-                  {user.name?.split(' ').map(n => n[0]).join('')}
+                  {user.name?.split(' ').map((n: string) => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
               <div className="text-center">
