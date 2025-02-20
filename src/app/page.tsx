@@ -16,7 +16,7 @@ export default function RootPage() {
       } else if (!hasRegistered) {
         router.push('/onboarding');
       } else {
-        router.push('/(protected)/profile');
+        router.push('/home');
       }
     }
   }, [isLoading, isAuthenticated, hasRegistered, router]);

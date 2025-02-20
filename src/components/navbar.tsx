@@ -19,7 +19,7 @@ export default function Navbar({ title }: { title: string }) {
   const [userData, setUserData] = useState<UserData>({});
   const router = useRouter();
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const isHome = pathname === "/home" || pathname === "/";
 
   useEffect(() => {
     if (window.Telegram?.WebApp) {

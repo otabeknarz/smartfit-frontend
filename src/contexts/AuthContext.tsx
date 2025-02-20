@@ -49,6 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (telegramId: string) => {
     const { has_registered_successfully } = await AuthService.login(telegramId);
+    console.log("has_registered_successfully", has_registered_successfully);
     setIsAuthenticated(true);
     setHasRegistered(has_registered_successfully);
   };
