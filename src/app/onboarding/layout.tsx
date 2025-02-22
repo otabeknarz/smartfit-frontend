@@ -3,7 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { LoadingScreen } from '@/components/LoadingScreen';
-
+import { OnboardingProvider } from '@/contexts/OnboardingContext';
 export default function OnboardingLayout({
   children,
 }: {
@@ -18,5 +18,9 @@ export default function OnboardingLayout({
     return null;
   }
 
-  return <div className="container mx-auto max-w-screen-sm">{children}</div>;
+  return (
+    <OnboardingProvider>
+      <div className="container mx-auto max-w-screen-sm">{children}</div>
+    </OnboardingProvider>
+  );
 } 

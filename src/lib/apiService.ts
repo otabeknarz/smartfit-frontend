@@ -42,9 +42,8 @@ export const AuthService = {
       const response = await axiosInstance.post<LoginResponse>('/users/login/', {
         id: telegramId,
       });
-      const { token, has_registered_successfully } = response.data;
-      TokenService.setToken(token);
-      return { success: true, has_registered_successfully };
+      TokenService.setToken(response.data.token);
+      return response.data;
     } catch (error) {
       console.error('Login error:', error);
       throw error;

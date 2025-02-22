@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import BottomBar from "@/components/bottomBar";
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 export default function ProtectedLayout({
   children,
@@ -24,11 +25,11 @@ export default function ProtectedLayout({
   if (!isAuthenticated) return null;
 
   return (
-    <>
+    <ProtectedRoute>
       <main className="pt-[64px] pb-[76px]">
         {children}
       </main>
       <BottomBar />
-    </>
+    </ProtectedRoute>
   );
 } 

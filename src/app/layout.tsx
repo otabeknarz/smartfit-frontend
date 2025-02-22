@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from '@/contexts/AuthContext';
-import { OnboardingProvider } from '@/contexts/OnboardingContext';
 import { Inter } from 'next/font/google';
 
 const poppinsFont = Poppins({
@@ -32,9 +31,7 @@ export default function RootLayout({
         className={`${poppinsFont.variable} antialiased font-[family-name:var(--font-poppins)] ${inter.className}`}
       >
         <AuthProvider>
-          <OnboardingProvider>
-            {children}
-          </OnboardingProvider>
+          {children}
         </AuthProvider>
       </body>
     </html>

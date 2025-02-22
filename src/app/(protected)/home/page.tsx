@@ -6,11 +6,9 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 export default function Home() {
   return (
     <ProtectedRoute>
-      <>
-        <Navbar title="SmartFit" />
-        <Courses />
-        <Meal />
-      </>
+      <Navbar title="SmartFit" />
+      <Courses />
+      <Meal />
     </ProtectedRoute>
   );
 }

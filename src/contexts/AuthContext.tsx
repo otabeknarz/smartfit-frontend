@@ -9,7 +9,6 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: any | null;
-  hasRegistered: boolean;
   login: (telegramId: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -20,7 +19,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<any | null>(null);
-  const [hasRegistered, setHasRegistered] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -48,10 +46,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [isAuthenticated, router]);
 
   const login = async (telegramId: string) => {
-    const { has_registered_successfully } = await AuthService.login(telegramId);
-    console.log("has_registered_successfully", has_registered_successfully);
-    setIsAuthenticated(true);
-    setHasRegistered(has_registered_successfully);
+    try {
+      const response = await AuthService.login(telegramId);
+      setIsAuthenticated(true);
+    } catch (error: any) {
+      console.error('Failed to login:', error);
+      throw error;
+    }
   };
 
   const logout = async () => {
@@ -66,7 +67,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isAuthenticated, 
       isLoading, 
       user, 
-      hasRegistered,
       login, 
       logout 
     }}>
