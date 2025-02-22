@@ -5,9 +5,12 @@ import { CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { useState } from "react";
+import { AuthService } from "@/lib/apiService";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function DonePage() {
   const router = useRouter();
+  const { user, setUser } = useAuth();
   const { submitData } = useOnboarding();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -16,7 +19,10 @@ export default function DonePage() {
     try {
       setIsSubmitting(true);
       await submitData();
-      router.push('/courses');
+      await AuthService.getMe().then((user) => {
+        setUser(user);
+      });
+      router.push('/home');
     } catch (error) {
       console.error('Failed to save data:', error);
       setError('Something went wrong. Please try again.');

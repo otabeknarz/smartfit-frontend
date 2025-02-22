@@ -11,6 +11,7 @@ interface AuthContextType {
   user: any | null;
   login: (telegramId: string) => Promise<void>;
   logout: () => Promise<void>;
+  setUser: (user: any) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -66,7 +67,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <AuthContext.Provider value={{ 
       isAuthenticated, 
       isLoading, 
-      user, 
+      user,
+      setUser,
       login, 
       logout 
     }}>
