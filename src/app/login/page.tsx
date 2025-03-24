@@ -11,10 +11,10 @@ export default function LoginPage() {
 
   useEffect(() => {
     const handleTelegramLogin = async () => {
-      const telegramUser = "4136905508";
-      if (telegramUser) {
+      const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+      if (telegramUser?.id) {
         try {
-          await login(telegramUser);
+          await login(telegramUser.id.toString());
           router.push("/home");
         } catch (error: any) {
           alert(error.response?.data?.error || "Login failed");
