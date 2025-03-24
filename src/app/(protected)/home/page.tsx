@@ -6,49 +6,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "@/lib/apiService";
 import { LoadingScreen } from "@/components/LoadingScreen";
-
-// Define course interface
-interface Trainer {
-  id: string;
-  name: string;
-  username: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-}
-
-interface Lesson {
-  id: string;
-  title: string;
-  description: string;
-  video_url: string;
-  duration: string;
-  is_free_preview: boolean;
-  order: number;
-}
-
-interface Part {
-  id: string;
-  title: string;
-  description: string;
-  order: number;
-  lessons: Lesson[];
-}
-
-export interface Course {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  price: string;
-  is_published: boolean;
-  category: Category;
-  trainers: Trainer[];
-  parts: Part[];
-}
+import { Course } from "@/types/course";
 
 export default function Home() {
   const [myCourses, setMyCourses] = useState<Course[]>([]);

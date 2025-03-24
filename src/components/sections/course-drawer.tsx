@@ -13,22 +13,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Course } from "@/types/course";
 
-import {
-  BookOpen,
-  Bookmark,
-  Users,
-  Calendar,
-  DollarSign,
-  Tag,
-  ArrowRight,
-  X,
-  Play,
-  Lock,
-} from "lucide-react";
+import { DollarSign, Tag, ArrowRight, X, Play, Lock } from "lucide-react";
 
 // Types based on the backend API response
 interface Trainer {
@@ -45,7 +35,7 @@ interface Trainer {
 interface Lesson {
   id: string;
   title: string;
-  slug: string; // Adding slug field for navigation
+  slug: string;
   description: string;
   video_url: string;
   duration: string;
@@ -67,21 +57,9 @@ interface Category {
   slug: string;
 }
 
-interface Course {
-  id: string;
-  title: string;
-  slug: string; // Adding slug field for consistency
-  description: string;
-  price: string;
-  is_published: boolean;
-  category: Category;
-  trainers: Trainer[];
-  parts: Part[];
-}
-
 interface CourseDrawerProps {
   course: Course | null;
-  slug: string;
+  slug?: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   isEnrolled: boolean;
@@ -131,7 +109,11 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
   };
 
   // Function to navigate to lesson
-  const navigateToLesson = (courseSlug: string, lessonSlug: string, isFreePreview: boolean) => {
+  const navigateToLesson = (
+    courseSlug: string,
+    lessonSlug: string,
+    isFreePreview: boolean
+  ) => {
     // Only navigate if the user is enrolled or the lesson is a free preview
     if (isEnrolled || isFreePreview) {
       router.push(`/courses/${courseSlug}/lessons/${lessonSlug}`);
@@ -185,7 +167,7 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
             {isEnrolled ? (
               // If enrolled, show "Continue Learning" button that triggers onEnroll function
               <Button
-                onClick={() => onEnroll(course.id, slug)}
+                onClick={() => onEnroll(course.id, slug!)}
                 className="w-full flex items-center justify-center gap-2"
               >
                 Continue Learning <ArrowRight className="w-4 h-4" />
@@ -262,17 +244,24 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
                       {part.lessons &&
                         part.lessons.map((lesson, lessonIndex) => {
                           // Determine if this lesson is accessible
-                          const isAccessible = isEnrolled || lesson.is_free_preview;
-                          
+                          const isAccessible =
+                            isEnrolled || lesson.is_free_preview;
+
                           return (
                             <div
                               key={lesson.id}
                               className={`flex items-center justify-between p-3 sm:p-4 transition-colors ${
-                                isAccessible ? "hover:bg-gray-50 cursor-pointer" : "cursor-not-allowed"
+                                isAccessible
+                                  ? "hover:bg-gray-50 cursor-pointer"
+                                  : "cursor-not-allowed"
                               }`}
-                              onClick={() => 
-                                lesson.slug && 
-                                navigateToLesson(slug, lesson.slug, lesson.is_free_preview)
+                              onClick={() =>
+                                lesson.slug &&
+                                navigateToLesson(
+                                  slug!,
+                                  lesson.slug,
+                                  lesson.is_free_preview
+                                )
                               }
                             >
                               <div className="flex items-center gap-2 sm:gap-3">
@@ -280,9 +269,13 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
                                   {lessonIndex + 1}
                                 </div>
                                 <div>
-                                  <p className={`font-medium text-xs sm:text-sm ${
-                                    isAccessible ? "text-gray-800" : "text-gray-500"
-                                  }`}>
+                                  <p
+                                    className={`font-medium text-xs sm:text-sm ${
+                                      isAccessible
+                                        ? "text-gray-800"
+                                        : "text-gray-500"
+                                    }`}
+                                  >
                                     {lesson.title}
                                   </p>
                                   {lesson.duration && (
@@ -292,7 +285,7 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
                                   )}
                                 </div>
                               </div>
-                              
+
                               {lesson.is_free_preview ? (
                                 <Button
                                   variant="outline"

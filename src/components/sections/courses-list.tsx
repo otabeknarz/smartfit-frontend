@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Users, Clock, DollarSign, Tag } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import type { Course } from "@/types/course";
 
 function formatTime(seconds: number) {
   const minutes = Math.floor(seconds / 60);
@@ -32,22 +33,11 @@ interface Category {
   slug: string;
 }
 
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  price: string;
-  is_published: boolean;
-  category: Category;
-  trainers: Trainer[];
-  created_at: string;
-}
-
 interface CoursesListProps {
-  courses: any[];
+  courses: Course[];
   loading?: boolean;
   error?: string | null;
-  onCourseSelect?: (course: any) => void;
+  onCourseSelect?: (course: Course) => void;
   enrolledCourseIds?: string[];
 }
 

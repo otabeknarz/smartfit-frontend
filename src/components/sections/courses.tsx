@@ -6,13 +6,24 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
-import { Clock, Users, ChevronRight, Bookmark, Loader2 } from "lucide-react";
+import {
+  Clock,
+  Users,
+  ChevronRight,
+  BookOpen,
+  Bookmark,
+  Loader2,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import CourseDrawer from "./course-drawer";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
+import Link from "next/link";
+import CoursesList from "./courses-list";
+import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
+import type { Course } from "@/types/course";
 
 interface CourseCardProps {
   title: string;
@@ -77,8 +88,8 @@ function CourseCard({
 }
 
 interface CoursesProps {
-  myCourses: any[];
-  allCourses: any[];
+  myCourses: Course[];
+  allCourses: Course[];
   loading?: boolean;
   error?: string | null;
 }
@@ -91,9 +102,9 @@ export default function Courses({
 }: CoursesProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [displayCourses, setDisplayCourses] = useState<any[]>([]);
+  const [displayCourses, setDisplayCourses] = useState<Course[]>([]);
   const [showingEnrolled, setShowingEnrolled] = useState(true);
 
   useEffect(() => {
@@ -110,7 +121,7 @@ export default function Courses({
     }
   }, [myCourses, allCourses]);
 
-  const handleCourseSelect = (course: any) => {
+  const handleCourseSelect = (course: Course) => {
     // Check if the course is enrolled
     const isEnrolled = myCourses.some((c) => c.id === course.id);
 
@@ -395,7 +406,7 @@ export default function Courses({
         {/* Course Drawer */}
         <CourseDrawer
           course={selectedCourse}
-          slug={selectedCourse?.slug}
+          slug={selectedCourse?.slug || ""}
           isOpen={isDrawerOpen}
           onOpenChange={setIsDrawerOpen}
           isEnrolled={myCourses.some((c) => c.id === selectedCourse?.id)}

@@ -6,66 +6,13 @@ import CourseDrawer from "@/components/sections/course-drawer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "@/lib/apiService";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { BookOpen, Bookmark, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { BookOpen, Bookmark, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-// Types based on the backend API response
-interface Trainer {
-  id: string;
-  name: string;
-  username: string;
-  phone_number?: string;
-  gender?: string;
-  age?: number;
-  height?: number;
-  date_joined?: string;
-}
-
-interface Lesson {
-  id: string;
-  title: string;
-  description: string;
-  video_url: string;
-  duration: string;
-  is_free_preview: boolean;
-  order: number;
-}
-
-interface Part {
-  id: string;
-  title: string;
-  description: string;
-  order: number;
-  lessons: Lesson[];
-}
-
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-}
-
-export interface Course {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  price: string;
-  is_published: boolean;
-  category: Category;
-  trainers: Trainer[];
-  parts: Part[];
-}
+import type { Course, Trainer, Lesson, Part, Category } from "@/types/course";
 
 export default function Course() {
   const { user } = useAuth();
