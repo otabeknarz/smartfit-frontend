@@ -1,12 +1,12 @@
-import axios from 'axios';
-import { TokenService } from './tokenService';
+import axios from "axios";
+import { TokenService } from "./tokenService";
 
-const API_URL = 'https://smartfitapi.otabek.me/api';
+const API_URL = "http://127.0.0.1:8000/api";
 
 export const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -39,35 +39,38 @@ export interface LoginResponse {
 export const AuthService = {
   login: async (telegramId: string) => {
     try {
-      const response = await axiosInstance.post<LoginResponse>('/users/login/', {
-        id: telegramId,
-      });
+      const response = await axiosInstance.post<LoginResponse>(
+        "/users/login/",
+        {
+          id: telegramId,
+        }
+      );
       TokenService.setToken(response.data.token);
       return response.data;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       throw error;
     }
   },
 
   logout: async () => {
     try {
-      await axiosInstance.get('/users/logout/');
+      await axiosInstance.get("/users/logout/");
       TokenService.clearToken();
       return true;
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
       throw error;
     }
   },
 
   getMe: async (): Promise<User> => {
-    const response = await axiosInstance.get('/users/get-me/');
+    const response = await axiosInstance.get("/users/get-me/");
     return response.data;
   },
 
   getMySessions: async (): Promise<Session[]> => {
-    const response = await axiosInstance.get('/users/get-my-sessions/');
+    const response = await axiosInstance.get("/users/get-my-sessions/");
     return response.data;
   },
-}; 
+};

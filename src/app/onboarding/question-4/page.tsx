@@ -21,7 +21,7 @@ export default function HeightPage() {
     }
 
     setHeight(height);
-    router.push("/onboarding/question-1");
+    router.push("/onboarding/question-5");
   };
 
   return (

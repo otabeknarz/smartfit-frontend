@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
@@ -11,16 +11,16 @@ export default function LoginPage() {
 
   useEffect(() => {
     const handleTelegramLogin = async () => {
-      const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+      const telegramUser = "4136905508";
       if (telegramUser) {
         try {
-          await login(telegramUser.id.toString());
-          router.push('/home');
+          await login(telegramUser);
+          router.push("/home");
         } catch (error: any) {
-          alert(error.response?.data?.error || 'Login failed');
+          alert(error.response?.data?.error || "Login failed");
         }
       } else {
-        alert('Please open this page from Telegram WebApp');
+        alert("Please open this page from Telegram WebApp");
       }
     };
 
@@ -30,7 +30,7 @@ export default function LoginPage() {
   }, [isAuthenticated, login, router]);
 
   if (isAuthenticated) {
-    router.push('/home');
+    router.push("/home");
     return null;
   }
 
@@ -48,4 +48,4 @@ export default function LoginPage() {
       </Card>
     </div>
   );
-} 
+}

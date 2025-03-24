@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Bell, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 interface UserData {
@@ -15,7 +16,13 @@ interface UserData {
   photo_url?: string;
 }
 
-export default function Navbar({ title }: { title: string }) {
+export default function Navbar({
+  title,
+  isLogo = false,
+}: {
+  title: string;
+  isLogo?: boolean;
+}) {
   const [userData, setUserData] = useState<UserData>({});
   const router = useRouter();
   const pathname = usePathname();
@@ -49,13 +56,16 @@ export default function Navbar({ title }: { title: string }) {
             {/* Left Section with Back Button and Title */}
             <div className="flex items-center gap-3">
               {!isHome && (
-                <button 
+                <button
                   onClick={() => router.back()}
                   className="p-1.5 rounded-xl hover:bg-gray-100 transition-colors"
                 >
                   <ChevronLeft className="w-5 h-5 text-gray-700" />
                 </button>
               )}
+              {isLogo ? (
+                <Image src="/logo.png" alt="Logo" width={32} height={32} />
+              ) : null}
               <div>
                 <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
                 {userData.firstName && (
@@ -68,11 +78,11 @@ export default function Navbar({ title }: { title: string }) {
             </div>
 
             {/* Right Section Avatar */}
-            <div className="flex items-center gap-3">              
+            <div className="flex items-center gap-3">
               <Avatar className="h-9 w-9 ring-2 ring-gray-100 transition-transform hover:scale-105">
-                <AvatarImage 
-                  src={userData?.photo_url} 
-                  alt={userData?.firstName || "User"} 
+                <AvatarImage
+                  src={userData?.photo_url}
+                  alt={userData?.firstName || "User"}
                   className="object-cover"
                 />
                 <AvatarFallback className="bg-primary/10 text-primary text-sm">
@@ -86,4 +96,3 @@ export default function Navbar({ title }: { title: string }) {
     </>
   );
 }
-

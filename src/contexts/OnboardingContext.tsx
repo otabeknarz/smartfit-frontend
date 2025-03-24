@@ -1,10 +1,10 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from 'react';
-import { axiosInstance } from '@/lib/apiService';
-import { API_URLS } from '@/constants/api';
-import { useRouter } from 'next/navigation';
-import { useAuth } from './AuthContext';
+import { createContext, useContext, useState, ReactNode } from "react";
+import { axiosInstance } from "@/lib/apiService";
+import { API_URLS } from "@/constants/api";
+import { useRouter } from "next/navigation";
+import { useAuth } from "./AuthContext";
 
 interface OnboardingData {
   gender: string;
@@ -20,7 +20,9 @@ interface OnboardingContextType {
   submitData: () => Promise<void>;
 }
 
-const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);
+const OnboardingContext = createContext<OnboardingContextType | undefined>(
+  undefined
+);
 
 export function OnboardingProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<Partial<OnboardingData>>({});
@@ -28,33 +30,35 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
 
   const setGender = (gender: string) => {
-    setData(prev => ({ ...prev, gender }));
+    setData((prev) => ({ ...prev, gender }));
   };
 
   const setAge = (age: number) => {
-    setData(prev => ({ ...prev, age }));
+    setData((prev) => ({ ...prev, age }));
   };
 
   const setHeight = (height: number) => {
-    setData(prev => ({ ...prev, height }));
+    setData((prev) => ({ ...prev, height }));
   };
 
   const submitData = async () => {
     if (!user?.id) {
-      throw new Error('User ID not found');
+      throw new Error("User ID not found");
     }
 
     try {
       await axiosInstance.post(API_URLS.UPDATE_USER(user.id), data);
-      router.push('/');
+      router.push("/");
     } catch (error) {
-      console.error('Failed to update user data:', error);
+      console.error("Failed to update user data:", error);
       throw error;
     }
   };
 
   return (
-    <OnboardingContext.Provider value={{ data, setGender, setAge, setHeight, submitData }}>
+    <OnboardingContext.Provider
+      value={{ data, setGender, setAge, setHeight, submitData }}
+    >
       {children}
     </OnboardingContext.Provider>
   );
@@ -63,7 +67,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
 export const useOnboarding = () => {
   const context = useContext(OnboardingContext);
   if (!context) {
-    throw new Error('useOnboarding must be used within OnboardingProvider');
+    throw new Error("useOnboarding must be used within OnboardingProvider");
   }
   return context;
-}; 
+};

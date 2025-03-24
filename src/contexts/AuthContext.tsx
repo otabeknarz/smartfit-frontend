@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { AuthService } from '@/lib/apiService';
-import { TokenService } from '@/lib/tokenService';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { AuthService } from "@/lib/apiService";
+import { TokenService } from "@/lib/tokenService";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -16,7 +16,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<any | null>(null);
@@ -35,10 +37,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const userData = await AuthService.getMe();
           setUser(userData);
         } catch (error) {
-          console.error('Failed to load user:', error);
+          console.error("Failed to load user:", error);
           setIsAuthenticated(false);
           TokenService.clearToken();
-          router.push('/login');
+          router.push("/login-again");
         }
       }
     };
@@ -51,7 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await AuthService.login(telegramId);
       setIsAuthenticated(true);
     } catch (error: any) {
-      console.error('Failed to login:', error);
+      console.error("Failed to login:", error);
       throw error;
     }
   };
@@ -60,18 +62,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await AuthService.logout();
     setIsAuthenticated(false);
     setUser(null);
-    router.push('/login');
+    router.push("/login-again");
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      isAuthenticated, 
-      isLoading, 
-      user,
-      setUser,
-      login, 
-      logout 
-    }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        isLoading,
+        user,
+        setUser,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -80,7 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-}; 
+};

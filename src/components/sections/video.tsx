@@ -1,7 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { Play, MessageCircle, Clock, Send, X, Star, StarHalf, ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  Play,
+  MessageCircle,
+  Clock,
+  Send,
+  X,
+  Star,
+  StarHalf,
+  ArrowLeft,
+  ArrowRight,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Drawer,
@@ -15,36 +25,33 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-interface VideoDetails {
+interface Lesson {
+  id: string;
   title: string;
-  thumbnail: string;
+  description: string;
+  video_url: string;
   duration: string;
-  instructor: {
+  is_free_preview: boolean;
+  order: number;
+}
+
+interface VideoProps {
+  lesson: Lesson;
+  instructor?: {
     name: string;
     avatar: string;
     initials: string;
     role: string;
   };
-  description: string;
-  commentCount: number;
-  nextVideo: {
-    title: string;
-    duration: string;
-    thumbnail: string;
-  };
-  rating: {
-    average: number;
-    count: number;
-    userRating?: number;
-  };
   navigation: {
-    next?: {
-      title: string;
-    };
     previous?: {
       title: string;
     };
+    next?: {
+      title: string;
+    };
   };
+  onNavigation: (direction: "previous" | "next") => void;
 }
 
 interface Comment {
@@ -58,38 +65,6 @@ interface Comment {
   timestamp: string;
 }
 
-const sampleVideo: VideoDetails = {
-  title: "Full Body Workout for Weight Loss",
-  thumbnail: "/fitness-1.png",
-  duration: "32:15",
-  instructor: {
-    name: "Sarah Johnson",
-    avatar: "/fitness-1.png", // You can change this to actual instructor avatar
-    initials: "SJ",
-    role: "Certified Fitness Trainer"
-  },
-  description: "Start your weight loss journey with this comprehensive full-body workout. Perfect for beginners, focusing on proper form and sustainable progress.",
-  commentCount: 89,
-  nextVideo: {
-    title: "Proper Form and Technique",
-    duration: "15:30",
-    thumbnail: "/fitness-1.png",
-  },
-  rating: {
-    average: 4.7,
-    count: 128,
-    userRating: undefined
-  },
-  navigation: {
-    next: {
-      title: "Proper Form and Technique",
-    },
-    previous: {
-      title: "Introduction to Fitness",
-    }
-  },
-};
-
 const sampleComments: Comment[] = [
   {
     id: "1",
@@ -99,7 +74,7 @@ const sampleComments: Comment[] = [
       initials: "JD",
     },
     text: "This workout was exactly what I needed! The instructions were clear and easy to follow.",
-    timestamp: "2 hours ago"
+    timestamp: "2 hours ago",
   },
   {
     id: "2",
@@ -109,7 +84,7 @@ const sampleComments: Comment[] = [
       initials: "AS",
     },
     text: "Great session! Could you please explain more about the proper breathing technique during the core exercises?",
-    timestamp: "5 hours ago"
+    timestamp: "5 hours ago",
   },
   // Add more sample comments as needed
 ];
@@ -151,7 +126,7 @@ function CommentsDrawer({ commentCount }: { commentCount: number }) {
         initials: "YO",
       },
       text: newComment,
-      timestamp: "Just now"
+      timestamp: "Just now",
     };
 
     setComments([comment, ...comments]);
@@ -161,11 +136,7 @@ function CommentsDrawer({ commentCount }: { commentCount: number }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button 
-          variant="secondary" 
-          size="sm" 
-          className="gap-2"
-        >
+        <Button variant="secondary" size="sm" className="gap-2">
           <MessageCircle className="w-4 h-4" />
           <span>{commentCount}</span>
         </Button>
@@ -181,7 +152,7 @@ function CommentsDrawer({ commentCount }: { commentCount: number }) {
             </DrawerClose>
           </div>
         </DrawerHeader>
-        
+
         <div className="flex flex-col h-[calc(100vh-10rem)]">
           {/* Comments List */}
           <ScrollArea className="flex-1">
@@ -202,7 +173,7 @@ function CommentsDrawer({ commentCount }: { commentCount: number }) {
                 placeholder="Add a comment..."
                 className="flex-1 px-4 py-2 text-sm border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20"
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     handleAddComment();
                   }
                 }}
@@ -222,7 +193,13 @@ function CommentsDrawer({ commentCount }: { commentCount: number }) {
   );
 }
 
-function RatingStars({ rating, onRate }: { rating: number; onRate?: (rating: number) => void }) {
+function RatingStars({
+  rating,
+  onRate,
+}: {
+  rating: number;
+  onRate?: (rating: number) => void;
+}) {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.5;
   const stars = [];
@@ -264,7 +241,13 @@ function RatingStars({ rating, onRate }: { rating: number; onRate?: (rating: num
   return <div className="flex items-center gap-1">{stars}</div>;
 }
 
-function VideoNavigation({ navigation }: { navigation: VideoDetails['navigation'] }) {
+function VideoNavigation({
+  navigation,
+  onNavigation,
+}: {
+  navigation: VideoProps["navigation"];
+  onNavigation: VideoProps["onNavigation"];
+}) {
   return (
     <div>
       {/* Navigation Labels */}
@@ -291,16 +274,18 @@ function VideoNavigation({ navigation }: { navigation: VideoDetails['navigation'
           <Button
             variant="secondary"
             className="flex items-center justify-center gap-2 flex-1"
+            onClick={() => onNavigation("previous")}
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Previous</span>
             <span className="sm:hidden">Prev</span>
           </Button>
         )}
-        
+
         {navigation.next && (
           <Button
             className="flex items-center justify-center gap-2 flex-1"
+            onClick={() => onNavigation("next")}
           >
             <span>Next</span>
             <ArrowRight className="w-4 h-4" />
@@ -311,10 +296,13 @@ function VideoNavigation({ navigation }: { navigation: VideoDetails['navigation'
   );
 }
 
-export default function Video() {
-  const [userRating, setUserRating] = useState<number | undefined>(
-    sampleVideo.rating.userRating
-  );
+export default function Video({
+  lesson,
+  navigation,
+  instructor,
+  onNavigation,
+}: VideoProps) {
+  const [userRating, setUserRating] = useState<number | undefined>(undefined);
 
   const handleRate = (rating: number) => {
     setUserRating(rating);
@@ -322,29 +310,29 @@ export default function Video() {
     console.log(`Rated ${rating} stars`);
   };
 
+  // Default instructor if none provided
+  const displayInstructor = instructor || {
+    name: "Sarah Johnson",
+    avatar: "/fitness-1.png",
+    initials: "SJ",
+    role: "Certified Fitness Trainer",
+  };
+
   return (
     <section className="bg-background">
       <div className="container mx-auto max-w-screen-sm p-4">
         {/* Video Player */}
         <div className="relative aspect-video w-full bg-gray-900 rounded-xl overflow-hidden shadow-lg">
-          <Image
-            src={sampleVideo.thumbnail}
-            alt={sampleVideo.title}
-            fill
-            className="object-cover"
-            priority
-          />
-          {/* Play Button Overlay */}
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] group hover:bg-black/50 transition-all cursor-pointer">
-            <div className="p-5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 group-hover:scale-110 transition-all duration-300">
-              <Play className="w-8 h-8 text-white fill-white" />
-            </div>
-          </div>
-          {/* Duration Badge */}
-          <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm text-white text-sm font-medium flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5" />
-            {sampleVideo.duration}
-          </div>
+          <iframe
+            src={lesson.video_url}
+            style={{
+              height: "100%",
+              width: "100%",
+              maxWidth: "100%",
+            }}
+            allowFullScreen={true}
+            allow="encrypted-media"
+          ></iframe>
         </div>
 
         {/* Video Info */}
@@ -352,59 +340,60 @@ export default function Video() {
           {/* Title and Instructor */}
           <div className="space-y-4">
             <h1 className="text-xl font-semibold text-gray-800 leading-snug">
-              {sampleVideo.title}
+              {lesson.title}
             </h1>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Avatar className="h-11 w-11 border-2 border-white shadow-md">
-                  <AvatarImage 
-                    src={sampleVideo.instructor.avatar}
-                    alt={sampleVideo.instructor.name}
+                  <AvatarImage
+                    src={displayInstructor.avatar}
+                    alt={displayInstructor.name}
                   />
                   <AvatarFallback className="bg-primary/10 text-primary font-medium">
-                    {sampleVideo.instructor.initials}
+                    {displayInstructor.initials}
                   </AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="text-sm font-medium text-gray-800">
-                    {sampleVideo.instructor.name}
+                    {displayInstructor.name}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {sampleVideo.instructor.role}
+                    {displayInstructor.role}
                   </p>
                 </div>
               </div>
-              <CommentsDrawer commentCount={sampleVideo.commentCount} />
+              <CommentsDrawer commentCount={89} />
             </div>
           </div>
 
           {/* Description */}
           <p className="text-sm text-gray-600 leading-relaxed">
-            {sampleVideo.description}
+            {lesson.description ||
+              "Start your fitness journey with this comprehensive workout."}
           </p>
 
-          {/* After the description and before Next Up section */}
-          <div className="bg-gray-50 rounded-xl p-4">
+          {/* Rating section - commented out for now */}
+          {/* <div className="bg-gray-50 rounded-xl p-4">
             <div className="flex flex-col items-center gap-2 text-center">
               <h3 className="text-sm font-medium text-gray-800">
-                {userRating ? 'Your Rating' : 'Rate this video'}
+                {userRating ? "Your Rating" : "Rate this video"}
               </h3>
-              <RatingStars 
-                rating={userRating || sampleVideo.rating.average} 
+              <RatingStars
+                rating={userRating || 4.7}
                 onRate={handleRate}
               />
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <span className="font-medium text-gray-800">
-                  {sampleVideo.rating.average.toFixed(1)}
+                  {4.7.toFixed(1)}
                 </span>
                 <span>•</span>
-                <span>{sampleVideo.rating.count} ratings</span>
+                <span>{128} ratings</span>
                 {userRating && (
                   <>
                     <span>•</span>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setUserRating(undefined)}
                       className="text-primary hover:text-primary/90 px-2 h-auto"
                     >
@@ -414,10 +403,13 @@ export default function Video() {
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Navigation */}
-          <VideoNavigation navigation={sampleVideo.navigation} />
+          <VideoNavigation
+            navigation={navigation}
+            onNavigation={onNavigation}
+          />
         </div>
       </div>
     </section>
