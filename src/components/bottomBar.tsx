@@ -3,26 +3,27 @@
 import { Home, BookOpen, ShoppingBag, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const bottomBarItems = [
   {
     icon: Home,
-    label: "Home",
+    labelKey: "home",
     href: "/home",
   },
   {
     icon: BookOpen,
-    label: "Courses",
+    labelKey: "courses",
     href: "/courses",
   },
   {
     icon: ShoppingBag,
-    label: "Shop",
+    labelKey: "shop",
     href: "/shop",
   },
   {
     icon: User,
-    label: "Profile",
+    labelKey: "profile",
     href: "/profile",
   },
 ];
@@ -76,14 +77,17 @@ function BottomBarItem({ icon: Icon, label, href, isActive }: BottomBarItemProps
 
 export default function BottomBar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   return (
     <section className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-lg bg-white/80 border-t border-gray-200">
       <div className="container flex items-center justify-around mx-auto max-w-screen-sm py-2">
         {bottomBarItems.map((item) => (
           <BottomBarItem 
-            key={item.label} 
-            {...item} 
+            key={item.labelKey} 
+            icon={item.icon}
+            label={t(item.labelKey)}
+            href={item.href}
             isActive={pathname === item.href}
           />
         ))}

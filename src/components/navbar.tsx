@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChevronLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface UserData {
   id?: number;
@@ -27,6 +28,7 @@ export default function Navbar({
   const router = useRouter();
   const pathname = usePathname();
   const isHome = pathname === "/home" || pathname === "/";
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (window.Telegram?.WebApp) {
@@ -70,7 +72,7 @@ export default function Navbar({
                 <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
                 {userData.firstName && (
                   <p className="text-xs text-gray-500">
-                    Welcome back, {userData.firstName}
+                    {t("welcome_back")}, {userData.firstName}
                     {userData.isPremium && " ⭐️"}
                   </p>
                 )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Navbar from "@/components/navbar";
@@ -19,11 +20,13 @@ import {
   Globe,
   Clock,
   CreditCard,
+  Settings,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "@/lib/apiService";
 import { API_URLS } from "@/constants/api";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 interface Session {
   ip_address: string;
@@ -70,9 +73,11 @@ function formatDeviceInfo(deviceInfo: string): {
 
 export default function ProfilePage() {
   const { user, isLoading, logout } = useAuth();
+  const { t } = useLanguage();
   const router = useRouter();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoadingSessions, setIsLoadingSessions] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -103,9 +108,13 @@ export default function ProfilePage() {
     }
   };
 
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
+
   return (
     <>
-      <Navbar title="Profile" />
+      <Navbar title={t("profile")} />
       <div className="container mx-auto max-w-screen-sm px-4 py-6">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 space-y-6">
           {/* Profile Header */}
@@ -124,27 +133,46 @@ export default function ProfilePage() {
               </h1>
               <p className="text-sm text-gray-500">@{user.username}</p>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+              onClick={toggleSettings}
+            >
+              <Settings className="w-4 h-4" />
+              {t("settings")}
+            </Button>
           </div>
+
+          {/* Settings Section */}
+          {showSettings && (
+            <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-lg font-medium text-gray-900">
+                {t("language_settings")}
+              </h2>
+              <LanguageSelector />
+            </div>
+          )}
 
           {/* Basic Information */}
           <div className="space-y-4">
             <h2 className="text-lg font-medium text-gray-900">
-              Basic Information
+              {t("basic_information")}
             </h2>
             <div className="grid gap-4">
               <InfoRow
                 icon={<Hash className="w-4 h-4" />}
-                label="ID"
+                label={t("id")}
                 value={user.id}
               />
               <InfoRow
                 icon={<AtSign className="w-4 h-4" />}
-                label="Username"
+                label={t("username")}
                 value={`@${user.username}`}
               />
               <InfoRow
                 icon={<Phone className="w-4 h-4" />}
-                label="Phone Number"
+                label={t("phone_number")}
                 value={user.phone_number}
               />
             </div>
@@ -153,23 +181,23 @@ export default function ProfilePage() {
           {/* Physical Information */}
           <div className="space-y-4">
             <h2 className="text-lg font-medium text-gray-900">
-              Physical Information
+              {t("physical_information")}
             </h2>
             <div className="grid gap-4">
               <InfoRow
                 icon={<UserCircle2 className="w-4 h-4" />}
-                label="Gender"
-                value={user.gender === "MALE" ? "Erkak" : "Ayol"}
+                label={t("gender")}
+                value={user.gender === "MALE" ? t("male") : t("female")}
               />
               <InfoRow
                 icon={<User2 className="w-4 h-4" />}
-                label="Age"
-                value={`${user.age} years`}
+                label={t("age")}
+                value={`${user.age} ${t("years")}`}
               />
               <InfoRow
                 icon={<Ruler className="w-4 h-4" />}
-                label="Height"
-                value={`${user.height} cm`}
+                label={t("height")}
+                value={`${user.height} ${t("cm")}`}
               />
             </div>
           </div>
@@ -177,12 +205,12 @@ export default function ProfilePage() {
           {/* Account Information */}
           <div className="space-y-4">
             <h2 className="text-lg font-medium text-gray-900">
-              Account Information
+              {t("account_information")}
             </h2>
             <div className="grid gap-4">
               <InfoRow
                 icon={<Calendar className="w-4 h-4" />}
-                label="Member Since"
+                label={t("member_since")}
                 value={formattedDate}
               />
             </div>
@@ -193,11 +221,11 @@ export default function ProfilePage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-medium text-gray-900">
-                  Payment History
+                  {t("payment_history")}
                 </h2>
                 <span className="text-sm text-gray-500">
                   {user.payments.length}{" "}
-                  {user.payments.length === 1 ? "payment" : "payments"}
+                  {user.payments.length === 1 ? t("payment") : t("payments")}
                 </span>
               </div>
               <div className="grid gap-4">
@@ -224,7 +252,7 @@ export default function ProfilePage() {
                       </div>
                     </div>
                     <div className="text-xs text-gray-400 pt-1">
-                      Paid on{" "}
+                      {t("paid_on")}{" "}
                       {format(
                         new Date(payment.created_at),
                         "MMM d, yyyy, h:mm a"
@@ -240,17 +268,17 @@ export default function ProfilePage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-medium text-gray-900">
-                Active Sessions
+                {t("active_sessions")}
               </h2>
               <span className="text-sm text-gray-500">
-                {sessions.length} active{" "}
-                {sessions.length === 1 ? "session" : "sessions"}
+                {sessions.length} {t("active")}{" "}
+                {sessions.length === 1 ? t("session") : t("sessions")}
               </span>
             </div>
             <div className="grid gap-4">
               {isLoadingSessions ? (
                 <div className="text-sm text-gray-500 text-center py-4">
-                  Loading sessions...
+                  {t("loading_sessions")}
                 </div>
               ) : sessions.length > 0 ? (
                 sessions.map((session, index) => {
@@ -276,7 +304,7 @@ export default function ProfilePage() {
                           </span>
                           {isCurrentSession && (
                             <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                              Current Session
+                              {t("current_session")}
                             </span>
                           )}
                         </div>
@@ -291,7 +319,7 @@ export default function ProfilePage() {
                         <div className="flex items-center gap-2 text-gray-500">
                           <Clock className="w-3.5 h-3.5" />
                           <span className="text-xs">
-                            Active:{" "}
+                            {t("active_colon")}{" "}
                             {format(
                               new Date(session.last_online),
                               "MMM d, h:mm a"
@@ -301,7 +329,7 @@ export default function ProfilePage() {
                       </div>
 
                       <div className="text-xs text-gray-400 pt-1">
-                        Started{" "}
+                        {t("started")}{" "}
                         {format(
                           new Date(session.created_at),
                           "MMM d, yyyy"
@@ -312,7 +340,7 @@ export default function ProfilePage() {
                 })
               ) : (
                 <div className="text-sm text-gray-500 text-center py-4">
-                  No active sessions found
+                  {t("no_active_sessions")}
                 </div>
               )}
             </div>
@@ -326,7 +354,7 @@ export default function ProfilePage() {
               onClick={handleLogout}
             >
               <LogOut className="w-4 h-4 mr-2" />
-              Logout
+              {t("logout")}
             </Button>
           </div>
         </div>
