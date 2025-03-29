@@ -12,9 +12,9 @@ export default function LoginPage() {
   useEffect(() => {
     const handleTelegramLogin = async () => {
       const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-      if (true) {
+      if (telegramUser) {
         try {
-          await login("7908233254");
+          await login(telegramUser.id.toString());
           router.push("/home");
         } catch (error: any) {
           alert(error.response?.data?.error || "Login failed");
