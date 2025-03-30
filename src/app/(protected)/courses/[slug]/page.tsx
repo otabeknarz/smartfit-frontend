@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Interfaces based on the provided data
 interface Category {
@@ -81,17 +82,19 @@ interface Course {
 }
 
 function notFound() {
+  const { t } = useLanguage();
+  
   return (
     <>
-      <Navbar title="No title" />
+      <Navbar title={t("no_title")} />
       <main className="bg-gray-50 min-h-[calc(100vh-80px)]">
         <div className="px-4 py-6 sm:py-8 max-w-screen-sm mx-auto">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-              No title
+              {t("no_title")}
             </h1>
             <p className="text-gray-500 text-sm sm:text-base">
-              Course not found
+              {t("course_not_found")}
             </p>
           </div>
         </div>
@@ -106,6 +109,7 @@ export default function CoursePage() {
   const [isEnrolling, setIsEnrolling] = useState(false);
   const router = useRouter();
   const { slug } = useParams<{ slug: string }>();
+  const { t } = useLanguage();
 
   useEffect(() => {
     async function getCourse() {
@@ -167,7 +171,7 @@ export default function CoursePage() {
 
   return (
     <>
-      <Navbar title={course?.title || "No title"} />
+      <Navbar title={course?.title || t("no_title")} />
       <main className="bg-gray-50 min-h-[calc(100vh-80px)]">
         <div className="container mx-auto px-4 py-8">
           {/* Hero Section */}
@@ -206,7 +210,7 @@ export default function CoursePage() {
                         variant="outline"
                         className="bg-green-50 text-green-700 border-green-200"
                       >
-                        <Unlock size={14} className="mr-1" /> Enrolled
+                        <Unlock size={14} className="mr-1" /> {t("enrolled")}
                       </Badge>
                     )}
                   </div>
@@ -220,15 +224,15 @@ export default function CoursePage() {
             <div className="lg:col-span-2">
               <Tabs defaultValue="overview" className="w-full">
                 <TabsList className="mb-6 w-full justify-start">
-                  <TabsTrigger value="overview">Overview</TabsTrigger>
-                  <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-                  <TabsTrigger value="trainers">Trainers</TabsTrigger>
+                  <TabsTrigger value="overview">{t("overview")}</TabsTrigger>
+                  <TabsTrigger value="curriculum">{t("curriculum")}</TabsTrigger>
+                  <TabsTrigger value="trainers">{t("trainers")}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>About This Course</CardTitle>
+                      <CardTitle>{t("about_this_course")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-gray-700 leading-relaxed">
@@ -241,14 +245,14 @@ export default function CoursePage() {
                 <TabsContent value="curriculum" className="space-y-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Course Curriculum</CardTitle>
+                      <CardTitle>{t("course_curriculum")}</CardTitle>
                       <CardDescription>
-                        {course.parts?.length} sections •{" "}
+                        {course.parts?.length} {t("parts")} •{" "}
                         {course.parts?.reduce(
                           (acc, part) => acc + part.lessons.length,
                           0
                         )}{" "}
-                        lessons
+                        {t("lessons")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -300,7 +304,7 @@ export default function CoursePage() {
                                               variant="outline"
                                               className="text-xs mt-1"
                                             >
-                                              Free Preview
+                                              {t("free_preview")}
                                             </Badge>
                                           )}
                                         </div>
@@ -321,7 +325,7 @@ export default function CoursePage() {
                 <TabsContent value="trainers" className="space-y-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Course Trainers</CardTitle>
+                      <CardTitle>{t("course_trainers")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       {course.trainers.map((trainer) => (
@@ -337,7 +341,7 @@ export default function CoursePage() {
                               {trainer.name}
                             </h3>
                             <p className="text-gray-600 mt-1">
-                              Certified Fitness Trainer
+                              {t("fitness_trainer")}
                             </p>
                           </div>
                         </div>
@@ -354,13 +358,13 @@ export default function CoursePage() {
                 <CardHeader>
                   <CardTitle>
                     {course.is_enrolled
-                      ? "You're enrolled"
-                      : "Enroll in this course"}
+                      ? t("youre_enrolled")
+                      : t("enroll_in_this_course")}
                   </CardTitle>
                   <CardDescription>
                     {course.is_enrolled
-                      ? "You have full access to all lessons and materials"
-                      : "Get access to all lessons and materials"}
+                      ? t("full_access_to_lessons")
+                      : t("get_access_to_lessons")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -372,7 +376,7 @@ export default function CoursePage() {
 
                   {course.is_enrolled ? (
                     <Button className="w-full" variant="outline">
-                      Continue Learning
+                      {t("continue_learning")}
                     </Button>
                   ) : (
                     <Button
@@ -380,7 +384,7 @@ export default function CoursePage() {
                       onClick={handleEnrollment}
                       disabled={isEnrolling}
                     >
-                      {isEnrolling ? "Processing..." : "Enroll Now"}
+                      {isEnrolling ? t("processing") : t("enroll_now")}
                     </Button>
                   )}
 
@@ -392,20 +396,12 @@ export default function CoursePage() {
                           (acc, part) => acc + part.lessons.length,
                           0
                         )}{" "}
-                        lessons
+                        {t("lessons")}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar size={16} className="text-gray-500" />
-                      <span>Lifetime access</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <User size={16} className="text-gray-500" />
-                      <span>
-                        {course.trainers.length > 1
-                          ? `${course.trainers.length} Trainers`
-                          : "1 Trainer"}
-                      </span>
+                      <span>{t("lifetime_access")}</span>
                     </div>
                   </div>
                 </CardContent>

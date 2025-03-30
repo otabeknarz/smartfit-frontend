@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Course } from "@/types/course";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import { DollarSign, Tag, ArrowRight, X, Play, Lock } from "lucide-react";
 
@@ -75,6 +76,7 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
   onEnroll,
 }) => {
   const router = useRouter();
+  const { t } = useLanguage();
 
   // Function to get trainer profile image URL or a default placeholder
   const getTrainerAvatarUrl = (trainer: Trainer) => {
@@ -89,20 +91,20 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
 
   // Function to get trainer role based on their information
   const getTrainerRole = (trainer: Trainer) => {
-    if (!trainer) return "Fitness Trainer";
+    if (!trainer) return t("fitness_trainer");
 
-    let role = "Fitness Trainer";
+    let role = t("fitness_trainer");
 
     // You can customize this based on your backend data
     if (trainer.gender === "FEMALE") {
-      role = "Women's Fitness Specialist";
+      role = t("womens_fitness_specialist");
     } else if (trainer.gender === "MALE") {
-      role = "Personal Trainer";
+      role = t("personal_trainer");
     }
 
     // You could add experience level based on age or other factors
     if (trainer.age && trainer.age > 35) {
-      role = "Senior " + role;
+      role = t("senior") + " " + role;
     }
 
     return role;
@@ -162,34 +164,11 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
         <Separator />
 
         <div className="px-4 py-4 sm:px-6">
-          {/* Course Action Button */}
-          <div className="mb-6">
-            {isEnrolled ? (
-              // If enrolled, show "Continue Learning" button that triggers onEnroll function
-              <Button
-                onClick={() => onEnroll(course.id, slug!)}
-                className="w-full flex items-center justify-center gap-2"
-              >
-                Continue Learning <ArrowRight className="w-4 h-4" />
-              </Button>
-            ) : (
-              // If not enrolled, show "See Course" button that navigates to course page
-              <Link href={`/courses/${slug}`} passHref>
-                <Button
-                  className="w-full flex items-center justify-center gap-2"
-                  onClick={() => onOpenChange(false)}
-                >
-                  See Course <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-            )}
-          </div>
-
           {/* Trainers Section */}
           {course.trainers && course.trainers.length > 0 && (
             <div className="mb-6">
               <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3">
-                Trainers
+                {t("trainers")}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {course.trainers.map((trainer) => (
@@ -199,20 +178,17 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
                   >
                     <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                       <Avatar>
-                        <AvatarFallback className="bg-primary/10 text-primary">
+                        <AvatarFallback>
                           {trainer.name
-                            ? trainer.name
-                                .split(" ")
-                                .map((name) => name[0])
-                                .join("")
-                            : ""}
+                            ? trainer.name.substring(0, 2).toUpperCase()
+                            : "TR"}
                         </AvatarFallback>
                       </Avatar>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-800 text-sm sm:text-base">
+                      <h4 className="font-medium text-gray-800">
                         {trainer.name}
-                      </p>
+                      </h4>
                       <p className="text-xs text-gray-500">
                         {getTrainerRole(trainer)}
                       </p>
@@ -223,102 +199,120 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
             </div>
           )}
 
-          {/* Course Content Section */}
+          {/* Lessons Preview Section */}
           {course.parts && course.parts.length > 0 && (
             <div>
               <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3">
-                Course Content
+                {t("lessons_preview")}
               </h3>
-              <div className="space-y-3">
-                {course.parts.map((part, index) => (
-                  <div
-                    key={part.id}
-                    className="border rounded-lg overflow-hidden"
-                  >
-                    <div className="py-2 px-3 sm:py-3 sm:px-4 bg-gray-50">
-                      <h4 className="text-sm sm:text-base font-medium">
-                        Part {index + 1}: {part.title}
-                      </h4>
-                    </div>
-                    <div className="divide-y divide-gray-100">
-                      {part.lessons &&
-                        part.lessons.map((lesson, lessonIndex) => {
-                          // Determine if this lesson is accessible
-                          const isAccessible =
-                            isEnrolled || lesson.is_free_preview;
-
-                          return (
+              <div className="space-y-4">
+                {course.parts.slice(0, 2).map((part) => (
+                  <div key={part.id} className="space-y-2">
+                    <h4 className="font-medium text-gray-700 text-sm">
+                      {part.title}
+                    </h4>
+                    <div className="space-y-2">
+                      {part.lessons.slice(0, 3).map((lesson) => (
+                        <div
+                          key={lesson.id}
+                          className={`flex items-center justify-between p-2 rounded-lg border ${
+                            isEnrolled || lesson.is_free_preview
+                              ? "cursor-pointer hover:bg-gray-50 border-gray-200"
+                              : "border-gray-100 bg-gray-50 opacity-75"
+                          }`}
+                          onClick={() =>
+                            navigateToLesson(
+                              slug!,
+                              lesson.slug,
+                              lesson.is_free_preview
+                            )
+                          }
+                        >
+                          <div className="flex items-center gap-3">
                             <div
-                              key={lesson.id}
-                              className={`flex items-center justify-between p-3 sm:p-4 transition-colors ${
-                                isAccessible
-                                  ? "hover:bg-gray-50 cursor-pointer"
-                                  : "cursor-not-allowed"
+                              className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                isEnrolled || lesson.is_free_preview
+                                  ? "bg-primary/10 text-primary"
+                                  : "bg-gray-100 text-gray-400"
                               }`}
-                              onClick={() =>
-                                lesson.slug &&
-                                navigateToLesson(
-                                  slug!,
-                                  lesson.slug,
-                                  lesson.is_free_preview
-                                )
-                              }
                             >
-                              <div className="flex items-center gap-2 sm:gap-3">
-                                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs sm:text-sm">
-                                  {lessonIndex + 1}
-                                </div>
-                                <div>
-                                  <p
-                                    className={`font-medium text-xs sm:text-sm ${
-                                      isAccessible
-                                        ? "text-gray-800"
-                                        : "text-gray-500"
-                                    }`}
-                                  >
-                                    {lesson.title}
-                                  </p>
-                                  {lesson.duration && (
-                                    <p className="text-xs text-gray-500">
-                                      Duration: {lesson.duration}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-
-                              {lesson.is_free_preview ? (
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="flex items-center gap-1.5 text-xs"
-                                >
-                                  <Play className="w-3 h-3" />
-                                  Free Preview
-                                </Button>
+                              {isEnrolled || lesson.is_free_preview ? (
+                                <Play className="w-4 h-4" />
                               ) : (
-                                <div className="text-xs font-medium text-gray-500 flex items-center gap-1.5">
-                                  {isEnrolled ? (
-                                    <Play className="w-3 h-3" />
-                                  ) : (
-                                    <Lock className="w-3 h-3" />
-                                  )}
-                                  {isEnrolled ? "Available" : "Locked"}
-                                </div>
+                                <Lock className="w-3 h-3" />
                               )}
                             </div>
-                          );
-                        })}
+                            <div>
+                              <h5
+                                className={`text-sm ${
+                                  isEnrolled || lesson.is_free_preview
+                                    ? "text-gray-800"
+                                    : "text-gray-500"
+                                }`}
+                              >
+                                {lesson.title}
+                              </h5>
+                              <p className="text-xs text-gray-500">
+                                {lesson.duration}
+                              </p>
+                            </div>
+                          </div>
+                          {lesson.is_free_preview && !isEnrolled && (
+                            <Badge
+                              variant="outline"
+                              className="text-xs bg-blue-50 text-blue-700 border-blue-100"
+                            >
+                              {t("free_preview")}
+                            </Badge>
+                          )}
+                        </div>
+                      ))}
+                      {part.lessons.length > 3 && (
+                        <p className="text-xs text-center text-gray-500 mt-2">
+                          {t("and_more_lessons", {
+                            count: part.lessons.length - 3,
+                          })}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
+                {course.parts.length > 2 && (
+                  <p className="text-xs text-center text-gray-500">
+                    {t("and_more_parts", {
+                      count: course.parts.length - 2,
+                    })}
+                  </p>
+                )}
               </div>
             </div>
           )}
         </div>
 
-        <DrawerFooter className="px-4 sm:px-6">
+        <DrawerFooter className="px-4 py-3 sm:px-6">
+          {isEnrolled ? (
+            // If enrolled, show "Continue Learning" button that triggers onEnroll function
+            <Button
+              onClick={() => onEnroll(course.id, slug!)}
+              className="w-full flex items-center justify-center gap-2"
+            >
+              {t("continue_learning")} <ArrowRight className="w-4 h-4" />
+            </Button>
+          ) : (
+            // If not enrolled, show "See Course" button that navigates to course page
+            <Link href={`/courses/${slug}`} passHref>
+              <Button
+                className="w-full flex items-center justify-center gap-2"
+                onClick={() => onOpenChange(false)}
+              >
+                {t("see_course")} <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          )}
           <DrawerClose asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline" className="w-full">
+              {t("close")}
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

@@ -2,23 +2,16 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, Clock, DollarSign, Tag } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Users, DollarSign, Tag } from "lucide-react";
 import type { Course } from "@/types/course";
 
-function formatTime(seconds: number) {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-}
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Types based on the backend API response
 interface Trainer {
@@ -48,6 +41,7 @@ const CoursesList: React.FC<CoursesListProps> = ({
   onCourseSelect,
   enrolledCourseIds = [],
 }) => {
+  const { t } = useLanguage();
   if (loading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
@@ -82,7 +76,7 @@ const CoursesList: React.FC<CoursesListProps> = ({
       <div className="text-center py-8">
         <div className="text-red-500 mb-2">Error: {error}</div>
         <Button onClick={() => window.location.reload()} variant="outline">
-          Try Again
+          {t("try_again")}
         </Button>
       </div>
     );
@@ -91,7 +85,7 @@ const CoursesList: React.FC<CoursesListProps> = ({
   if (!courses || courses.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-500 mb-2">No courses found</p>
+        <p className="text-gray-500 mb-2">{t("no_courses_found")}</p>
       </div>
     );
   }
@@ -138,7 +132,7 @@ const CoursesList: React.FC<CoursesListProps> = ({
                     variant="secondary"
                     className="bg-yellow-100 text-yellow-800 border-yellow-200"
                   >
-                    Draft
+                    {t("draft")}
                   </Badge>
                 </div>
               )}
@@ -148,7 +142,7 @@ const CoursesList: React.FC<CoursesListProps> = ({
                     variant="secondary"
                     className="bg-green-100 text-green-800 border-green-200"
                   >
-                    Enrolled
+                    {t("enrolled")}
                   </Badge>
                 </div>
               )}
@@ -196,7 +190,7 @@ const CoursesList: React.FC<CoursesListProps> = ({
                   size="sm"
                   className="text-xs h-7 px-2 sm:h-8 sm:px-3"
                 >
-                  {isEnrolled ? "Continue Learning" : "View Details"}
+                  {isEnrolled ? t("continue_learning") : t("view_details")}
                 </Button>
               </div>
             </CardContent>

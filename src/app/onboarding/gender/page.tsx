@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { UserCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useOnboarding } from "@/contexts/OnboardingContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function GenderPage() {
   const router = useRouter();
   const { data, setGender } = useOnboarding();
+  const { t } = useLanguage();
 
   const handleSelect = (gender: string) => {
     setGender(gender);
@@ -30,10 +32,10 @@ export default function GenderPage() {
           
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold text-gray-900">
-              What's your gender?
+              {t("whats_your_gender")}
             </h1>
             <p className="text-gray-500">
-              This helps us personalize your fitness journey
+              {t("personalize_fitness_journey")}
             </p>
           </div>
 
@@ -43,18 +45,18 @@ export default function GenderPage() {
               className="h-14 text-lg"
               onClick={() => handleSelect('MALE')}
             >
-              Male
+              {t("male")}
             </Button>
             <Button
               variant={data.gender === 'FEMALE' ? 'default' : 'outline'}
               className="h-14 text-lg"
               onClick={() => handleSelect('FEMALE')}
             >
-              Female
+              {t("female")}
             </Button>
           </div>
         </div>
       </div>
     </div>
   );
-} 
+}

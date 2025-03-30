@@ -13,6 +13,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { BookOpen, Bookmark, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { Course, Trainer, Lesson, Part, Category } from "@/types/course";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Course() {
   const { user } = useAuth();
@@ -25,6 +26,7 @@ export default function Course() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("all");
   const router = useRouter();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchMyCourses = async () => {
@@ -34,7 +36,7 @@ export default function Course() {
         setMyCourses(data);
       } catch (err) {
         console.error("Error fetching courses:", err);
-        setError("Failed to load courses. Please try again later.");
+        setError(t("failed_to_load_courses"));
       } finally {
         setLoading(false);
       }
@@ -47,7 +49,7 @@ export default function Course() {
         setCourses(data);
       } catch (err) {
         console.error("Error fetching courses:", err);
-        setError("Failed to load courses. Please try again later.");
+        setError(t("failed_to_load_courses"));
       } finally {
         setLoading(false);
       }
@@ -55,7 +57,7 @@ export default function Course() {
 
     fetchMyCourses();
     fetchCourses();
-  }, []);
+  }, [t]);
 
   const handleCourseSelect = (course: Course) => {
     // Check if the course is enrolled
@@ -86,8 +88,8 @@ export default function Course() {
       // Enroll in the course
       console.log("Enroll in course:", courseId);
       toast({
-        title: "Enrollment Successful",
-        description: "You have successfully enrolled in this course!",
+        title: t("enrollment_successful"),
+        description: t("successfully_enrolled"),
       });
 
       // For demo purposes, add the course to myCourses
@@ -100,11 +102,11 @@ export default function Course() {
   if (loading) {
     return (
       <>
-        <Navbar title="Courses" />
+        <Navbar title={t("courses")} />
         <div className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="h-10 w-10 text-primary animate-spin" />
-            <p className="text-gray-500 font-medium">Loading courses...</p>
+            <p className="text-gray-500 font-medium">{t("loading_courses")}</p>
           </div>
         </div>
       </>
@@ -114,14 +116,14 @@ export default function Course() {
   if (error) {
     return (
       <>
-        <Navbar title="Courses" />
+        <Navbar title={t("courses")} />
         <div className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4">
           <Card className="max-w-md w-full">
             <CardHeader className="flex flex-col items-center space-y-2">
               <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
                 <span className="text-red-500 text-xl">!</span>
               </div>
-              <CardTitle className="text-red-500">Error</CardTitle>
+              <CardTitle className="text-red-500">{t("error")}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-center text-gray-500">{error}</p>
@@ -131,7 +133,7 @@ export default function Course() {
                 onClick={() => window.location.reload()}
                 variant="default"
               >
-                Try Again
+                {t("try_again")}
               </Button>
             </CardFooter>
           </Card>
@@ -142,15 +144,15 @@ export default function Course() {
 
   return (
     <>
-      <Navbar title="Courses" />
+      <Navbar title={t("courses")} />
       <main className="bg-gray-50 min-h-[calc(100vh-80px)]">
         <div className="px-4 py-6 sm:py-8 max-w-screen-sm mx-auto">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-              Courses
+              {t("courses")}
             </h1>
             <p className="text-gray-500 text-sm sm:text-base">
-              Discover and learn from our collection of fitness courses
+              {t("discover_new_courses")}
             </p>
           </div>
 
@@ -166,21 +168,21 @@ export default function Course() {
                   className="data-[state=active]:bg-primary data-[state=active]:text-white text-xs sm:text-sm"
                 >
                   <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
-                  All Courses
+                  {t("all_courses")}
                 </TabsTrigger>
                 <TabsTrigger
                   value="my"
                   className="data-[state=active]:bg-primary data-[state=active]:text-white text-xs sm:text-sm"
                 >
                   <Bookmark className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
-                  My Courses
+                  {t("my_courses")}
                 </TabsTrigger>
               </TabsList>
 
               <div className="text-xs sm:text-sm text-gray-500">
                 {activeTab === "all"
-                  ? `${courses.length} courses available`
-                  : `${myCourses.length} enrolled courses`}
+                  ? `${courses.length} ${t("available_courses")}`
+                  : `${myCourses.length} ${t("enrolled_courses")}`}
               </div>
             </div>
 
@@ -215,11 +217,10 @@ export default function Course() {
                         <Bookmark className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
                       </div>
                       <h3 className="text-base sm:text-lg font-medium text-gray-800 mb-2">
-                        No enrolled courses
+                        {t("no_enrolled_courses").split('.')[0]}
                       </h3>
                       <p className="text-gray-500 text-center text-sm sm:text-base max-w-md mb-6">
-                        You haven't enrolled in any courses yet. Browse our
-                        collection and start your fitness journey today!
+                        {t("no_enrolled_courses")}
                       </p>
                       <Button
                         onClick={() => setActiveTab("all")}
@@ -227,7 +228,7 @@ export default function Course() {
                         size="sm"
                         className="text-xs sm:text-sm"
                       >
-                        Browse Courses
+                        {t("browse_courses")}
                       </Button>
                     </div>
                   )}

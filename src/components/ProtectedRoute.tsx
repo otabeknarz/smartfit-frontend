@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { LoadingSpinner } from './ui/loading-spinner';
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { LoadingSpinner } from "./ui/loading-spinner";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, user } = useAuth();
@@ -11,11 +11,15 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/login');
-    } else if (user?.age === null || user?.gender === null || user?.height === null) {
-      router.push('/onboarding');
+      router.push("/login");
+    } else if (
+      user?.age === null ||
+      user?.gender === null ||
+      user?.height === null
+    ) {
+      router.push("/onboarding");
     } else {
-      router.push('/home');
+      router.push("/home");
     }
   }, [isAuthenticated, user, router]);
 
@@ -28,4 +32,4 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   return <>{children}</>;
-} 
+}

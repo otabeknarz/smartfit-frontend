@@ -6,17 +6,19 @@ import { Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AgePage() {
   const router = useRouter();
   const { setAge } = useOnboarding();
   const [value, setValue] = useState('');
   const [error, setError] = useState('');
+  const { t } = useLanguage();
 
   const handleContinue = () => {
     const age = parseInt(value);
     if (age < 12 || age > 100) {
-      setError('Please enter a valid age between 12 and 100');
+      setError(t('enter_valid_age'));
       return;
     }
     setAge(age);
@@ -37,17 +39,17 @@ export default function AgePage() {
           
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold text-gray-900">
-              How old are you?
+              {t("how_old_are_you")}
             </h1>
             <p className="text-gray-500">
-              Your age helps us recommend appropriate exercises
+              {t("age_helps_recommend")}
             </p>
           </div>
 
           <div className="w-full space-y-4">
             <Input
               type="number"
-              placeholder="Enter your age"
+              placeholder={t("enter_your_age")}
               value={value}
               onChange={(e) => {
                 setValue(e.target.value);
@@ -67,10 +69,10 @@ export default function AgePage() {
             disabled={!value}
             onClick={handleContinue}
           >
-            Continue
+            {t("continue")}
           </Button>
         </div>
       </div>
     </div>
   );
-} 
+}

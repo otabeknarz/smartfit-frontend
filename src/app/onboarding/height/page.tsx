@@ -6,17 +6,19 @@ import { Ruler } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function HeightPage() {
   const router = useRouter();
   const { setHeight } = useOnboarding();
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+  const { t } = useLanguage();
 
   const handleContinue = () => {
     const height = parseInt(value);
     if (height < 100 || height > 250) {
-      setError("Please enter a valid height between 100 and 250 cm");
+      setError(t("enter_valid_height"));
       return;
     }
 
@@ -38,10 +40,10 @@ export default function HeightPage() {
 
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold text-gray-900">
-              What's your height?
+              {t("whats_your_height")}
             </h1>
             <p className="text-gray-500">
-              This helps us calculate your fitness metrics
+              {t("height_helps_calculate")}
             </p>
           </div>
 
@@ -49,7 +51,7 @@ export default function HeightPage() {
             <div className="relative">
               <Input
                 type="number"
-                placeholder="Enter your height"
+                placeholder={t("enter_your_height")}
                 value={value}
                 onChange={(e) => {
                   setValue(e.target.value);
@@ -58,7 +60,7 @@ export default function HeightPage() {
                 className="text-center text-lg h-14 pr-12"
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
-                cm
+                {t("cm")}
               </span>
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -71,7 +73,7 @@ export default function HeightPage() {
             disabled={!value}
             onClick={handleContinue}
           >
-            Continue
+            {t("continue")}
           </Button>
         </div>
       </div>

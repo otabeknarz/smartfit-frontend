@@ -3,9 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Dumbbell } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function WelcomePage() {
   const router = useRouter();
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -23,10 +25,10 @@ export default function WelcomePage() {
           
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold text-gray-900">
-              Welcome to SmartFit
+              {t("welcome_to_smartfit")}
             </h1>
             <p className="text-gray-500">
-              Your personal fitness journey starts here. Access premium fitness courses through Telegram, no app installation needed.
+              {t("personal_fitness_journey")}
             </p>
           </div>
         </div>
@@ -37,10 +39,10 @@ export default function WelcomePage() {
             className="w-full h-14 text-lg"
             onClick={() => router.push('/onboarding/gender')}
           >
-            Get Started
+            {t("get_started")}
           </Button>
         </div>
       </div>
     </div>
   );
-} 
+}

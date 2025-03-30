@@ -24,6 +24,7 @@ import CoursesList from "./courses-list";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import type { Course } from "@/types/course";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CourseCardProps {
   title: string;
@@ -102,6 +103,7 @@ export default function Courses({
 }: CoursesProps) {
   const router = useRouter();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [displayCourses, setDisplayCourses] = useState<Course[]>([]);
@@ -147,8 +149,8 @@ export default function Courses({
     } else {
       // Enroll in the course
       toast({
-        title: "Enrollment Successful",
-        description: "You have successfully enrolled in this course!",
+        title: t("enrollment_successful"),
+        description: t("successfully_enrolled"),
       });
 
       // For demo purposes, add the course to myCourses
@@ -170,7 +172,9 @@ export default function Courses({
           <div className="flex items-center justify-center min-h-[300px]">
             <div className="flex flex-col items-center gap-4">
               <Loader2 className="h-10 w-10 text-primary animate-spin" />
-              <p className="text-gray-500 font-medium">Loading courses...</p>
+              <p className="text-gray-500 font-medium">
+                {t("loading_courses")}
+              </p>
             </div>
           </div>
         </div>
@@ -189,7 +193,7 @@ export default function Courses({
                 onClick={() => window.location.reload()}
                 variant="outline"
               >
-                Try Again
+                {t("try_again")}
               </Button>
             </div>
           </div>
@@ -205,19 +209,19 @@ export default function Courses({
         <div className="space-y-2 px-4 mb-6">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-semibold text-gray-800">
-              {showingEnrolled ? "My Courses" : "Available Courses"}
+              {showingEnrolled ? t("my_courses") : t("available_courses")}
             </h1>
             <button
               className="text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors"
               onClick={handleViewAllCourses}
             >
-              View All
+              {t("view_all")}
             </button>
           </div>
           <p className="text-sm text-gray-500">
             {showingEnrolled
-              ? "Continue your learning journey"
-              : "Discover and enroll in new courses"}
+              ? t("continue_your_learning")
+              : t("discover_new_courses")}
           </p>
         </div>
 
@@ -259,7 +263,7 @@ export default function Courses({
                                   variant="secondary"
                                   className="bg-green-100 text-green-800 border-green-200"
                                 >
-                                  Enrolled
+                                  {t("enrolled")}
                                 </Badge>
                               </div>
                             </div>
@@ -289,7 +293,7 @@ export default function Courses({
                                   size="sm"
                                   className="text-xs h-7 px-2"
                                 >
-                                  Continue
+                                  {t("continue_learning")}
                                 </Button>
                               </div>
                             </div>
@@ -370,7 +374,10 @@ export default function Courses({
                       onClick={handleViewAllCourses}
                       className="text-xs sm:text-sm"
                     >
-                      View All {allCourses.length} Courses
+                      {t("view_all_courses").replace(
+                        "{count}",
+                        allCourses.length.toString()
+                      )}
                     </Button>
                   </div>
                 )}
@@ -383,12 +390,12 @@ export default function Courses({
               <Bookmark className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
             </div>
             <h3 className="text-base sm:text-lg font-medium text-gray-800 mb-2">
-              No courses found
+              {t("no_courses_found")}
             </h3>
             <p className="text-gray-500 text-center text-sm sm:text-base max-w-md mb-6 mx-auto">
               {showingEnrolled
-                ? "You haven't enrolled in any courses yet. Browse our collection and start your fitness journey today!"
-                : "There are no courses available at the moment. Please check back later."}
+                ? t("no_enrolled_courses")
+                : t("no_available_courses")}
             </p>
             {showingEnrolled && (
               <Button
@@ -397,21 +404,23 @@ export default function Courses({
                 size="sm"
                 className="text-xs sm:text-sm"
               >
-                Browse Courses
+                {t("browse_courses")}
               </Button>
             )}
           </div>
         )}
 
         {/* Course Drawer */}
-        <CourseDrawer
-          course={selectedCourse}
-          slug={selectedCourse?.slug || ""}
-          isOpen={isDrawerOpen}
-          onOpenChange={setIsDrawerOpen}
-          isEnrolled={myCourses.some((c) => c.id === selectedCourse?.id)}
-          onEnroll={(courseId, slug) => handleEnrollCourse(courseId, slug)}
-        />
+        {selectedCourse && (
+          <CourseDrawer
+            course={selectedCourse}
+            slug={selectedCourse.slug}
+            isOpen={isDrawerOpen}
+            onOpenChange={setIsDrawerOpen}
+            isEnrolled={myCourses.some((c) => c.id === selectedCourse.id)}
+            onEnroll={handleEnrollCourse}
+          />
+        )}
       </div>
     </section>
   );

@@ -7,7 +7,7 @@ type Language = "ru" | "en";
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, any>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -64,13 +64,22 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [language]);
 
-  // Translation function
-  const t = (key: string): string => {
+  // Translation function with interpolation support
+  const t = (key: string, params?: Record<string, any>): string => {
     if (isLoading || !translations[language]) {
       return key;
     }
     
-    return translations[language][key] || translations["ru"][key] || key;
+    let text = translations[language][key] || translations["ru"][key] || key;
+    
+    // If params are provided, replace placeholders in the text
+    if (params) {
+      Object.entries(params).forEach(([paramKey, paramValue]) => {
+        text = text.replace(new RegExp(`{${paramKey}}`, 'g'), String(paramValue));
+      });
+    }
+    
+    return text;
   };
 
   return (

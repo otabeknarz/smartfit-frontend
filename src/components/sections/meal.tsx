@@ -8,7 +8,9 @@ export default function Meal() {
         {/* Header */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-semibold text-gray-800">Today's Meal</h1>
+            <h1 className="text-2xl font-semibold text-gray-800">
+              Today's Meal
+            </h1>
             <p className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
               2/15/2025
             </p>
@@ -34,35 +36,49 @@ export default function Meal() {
               </div>
             </div>
           </div>
-          
+
           {/* Image and Info Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative aspect-square w-full overflow-hidden rounded-xl">
-              <Image 
-                src="/meal.png" 
-                alt="Osh - Traditional Central Asian Rice Pilaf" 
+              <Image
+                src="/meal.png"
+                alt="Osh - Traditional Central Asian Rice Pilaf"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
-            
+
             {/* Nutritional Info */}
             <div className="flex flex-col justify-center space-y-4">
-              <h3 className="text-lg font-medium text-gray-800">Nutritional Value</h3>
+              <h3 className="text-lg font-medium text-gray-800">
+                Nutritional Value
+              </h3>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { label: "Calories", value: "500 kcal", desc: "Daily value: 25%" },
+                  {
+                    label: "Calories",
+                    value: "500 kcal",
+                    desc: "Daily value: 25%",
+                  },
                   { label: "Weight", value: "300g", desc: "Per serving" },
-                  { label: "Protein", value: "30g", desc: "Essential for muscles" },
+                  {
+                    label: "Protein",
+                    value: "30g",
+                    desc: "Essential for muscles",
+                  },
                   { label: "Fat", value: "20g", desc: "Healthy fats included" },
                 ].map((item) => (
-                  <div 
+                  <div
                     key={item.label}
                     className="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors duration-200"
                   >
-                    <p className="text-sm font-medium text-gray-500">{item.label}</p>
-                    <p className="text-lg font-semibold text-gray-800">{item.value}</p>
+                    <p className="text-sm font-medium text-gray-500">
+                      {item.label}
+                    </p>
+                    <p className="text-lg font-semibold text-gray-800">
+                      {item.value}
+                    </p>
                     <p className="text-xs text-gray-500 mt-1">{item.desc}</p>
                   </div>
                 ))}
@@ -76,7 +92,7 @@ export default function Meal() {
               <h3 className="text-lg font-medium text-gray-800">Meal Rating</h3>
               <div className="flex items-center justify-center gap-2">
                 {[...Array(5)].map((_, index) => (
-                  <Star 
+                  <Star
                     key={index}
                     className="w-6 h-6 text-yellow-400 fill-yellow-400 hover:scale-110 transition-transform duration-200 cursor-pointer"
                   />

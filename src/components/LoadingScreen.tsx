@@ -7,4 +7,4 @@ export function LoadingScreen() {
       </div>
     </div>
   );
-} 
+}
