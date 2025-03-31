@@ -21,6 +21,7 @@ import {
   ClipboardList,
   Lock,
   Play,
+  Coins,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -32,6 +33,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useParams } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Interfaces based on the data structure
 interface Category {
@@ -100,6 +102,7 @@ export default function LessonPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const params = useParams<{ slug: string; lessonSlug: string }>();
+  const { t } = useLanguage();
 
   // Get previous and next lesson for navigation
   const [prevLesson, setPrevLesson] = useState<Lesson | null>(null);
@@ -195,11 +198,11 @@ export default function LessonPage() {
   if (loading) {
     return (
       <>
-        <Navbar title="Loading..." />
+        <Navbar title={t("loading")} />
         <div className="flex min-h-screen items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading lesson content...</p>
+            <p className="mt-4 text-gray-600">{t("loading_courses")}</p>
           </div>
         </div>
       </>
@@ -209,22 +212,22 @@ export default function LessonPage() {
   if (error || !course || !currentLesson) {
     return (
       <>
-        <Navbar title="Error" />
+        <Navbar title={t("error")} />
         <main className="bg-gray-50 min-h-[calc(100vh-80px)]">
           <div className="container mx-auto px-4 py-8">
             <div className="max-w-3xl mx-auto">
               <Card>
                 <CardHeader>
-                  <CardTitle>Error Loading Lesson</CardTitle>
+                  <CardTitle>{t("error_loading_lesson")}</CardTitle>
                   <CardDescription>
-                    {error || "Lesson or course not found"}
+                    {error || t("lesson_not_found")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href={`/courses/${params.slug}`}>
                     <Button>
                       <ArrowLeft className="mr-2 h-4 w-4" />
-                      Back to Course
+                      {t("back_to_course")}
                     </Button>
                   </Link>
                 </CardContent>
@@ -249,8 +252,7 @@ export default function LessonPage() {
                   <Badge className="w-fit mb-2">{currentPartTitle}</Badge>
                   <CardTitle>{currentLesson.title}</CardTitle>
                   <CardDescription>
-                    This is a premium lesson. You need to enroll in the course
-                    to view it.
+                    {t("premium_lesson_description")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -258,14 +260,18 @@ export default function LessonPage() {
                     <div className="text-center">
                       <Lock className="h-12 w-12 text-gray-400 mx-auto mb-3" />
                       <h3 className="text-lg font-medium text-gray-900 mb-1">
-                        Content Locked
+                        {t("content_locked")}
                       </h3>
                       <p className="text-gray-500 mb-4">
-                        You need to enroll in this course to access this lesson
+                        {t("enroll_to_access")}
                       </p>
                       <Link href={`/courses/${params.slug}`}>
                         <Button>
-                          Enroll Now (${parseFloat(course.price).toFixed(2)})
+                          {t("enroll_now")} (
+                          {new Intl.NumberFormat("uz-UZ").format(
+                            parseFloat(course.price)
+                          )}{" "}
+                          UZS)
                         </Button>
                       </Link>
                     </div>
@@ -275,7 +281,7 @@ export default function LessonPage() {
                     <Link href={`/courses/${params.slug}`}>
                       <Button variant="outline">
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to Course
+                        {t("back_to_course")}
                       </Button>
                     </Link>
                   </div>
@@ -295,7 +301,7 @@ export default function LessonPage() {
           name: course.trainers[0].name,
           avatar: "", // You would add avatar URL here if available
           initials: course.trainers[0].name.substring(0, 2),
-          role: "Instructor",
+          role: t("instructor"),
         }
       : undefined;
 
@@ -326,7 +332,6 @@ export default function LessonPage() {
                 <span>/</span>
                 <span>{currentPartTitle}</span>
               </div>
-              <h1 className="text-2xl font-bold">{currentLesson.title}</h1>
             </div>
 
             <Card className="mb-8 overflow-hidden">
@@ -343,15 +348,15 @@ export default function LessonPage() {
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-2">
                   <ClipboardList className="h-5 w-5 text-blue-600" />
-                  <CardTitle>Course Content</CardTitle>
+                  <CardTitle>{t("course_content")}</CardTitle>
                 </div>
                 <CardDescription>
-                  {course.parts.length} sections •{" "}
+                  {course.parts.length} {t("parts")} •{" "}
                   {course.parts.reduce(
                     (acc, part) => acc + part.lessons.length,
                     0
                   )}{" "}
-                  lessons
+                  {t("lessons")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -384,7 +389,7 @@ export default function LessonPage() {
                             <div className="flex items-start text-left">
                               <span className="font-medium">{part.title}</span>
                               <span className="text-xs text-gray-500 ml-2 mt-1">
-                                ({sortedLessons.length} lessons)
+                                ({sortedLessons.length} {t("lessons")})
                               </span>
                             </div>
                           </AccordionTrigger>
@@ -429,13 +434,13 @@ export default function LessonPage() {
                                         {lesson.title}
                                       </div>
                                       <div className="flex items-center gap-2 text-xs text-gray-500">
-                                        <span>{lesson.duration}</span>
+                                        <span>{lesson.duration.slice(3)}</span>
                                         {lesson.is_free_preview && (
                                           <Badge
                                             variant="outline"
                                             className="h-5 text-xs"
                                           >
-                                            Free Preview
+                                            {t("free_preview")}
                                           </Badge>
                                         )}
                                       </div>
@@ -456,7 +461,7 @@ export default function LessonPage() {
             {currentLesson.description && (
               <Card className="mb-8">
                 <CardHeader>
-                  <CardTitle>Lesson Description</CardTitle>
+                  <CardTitle>{t("lesson_description")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-700">{currentLesson.description}</p>
@@ -468,7 +473,7 @@ export default function LessonPage() {
               <Link href={`/courses/${params.slug}`}>
                 <Button variant="outline">
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Course
+                  {t("back_to_course")}
                 </Button>
               </Link>
             </div>

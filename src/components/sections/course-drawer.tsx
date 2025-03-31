@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { Course } from "@/types/course";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-import { DollarSign, Tag, ArrowRight, X, Play, Lock } from "lucide-react";
+import { Tag, ArrowRight, X, Play, Lock, Coins } from "lucide-react";
 
 // Types based on the backend API response
 interface Trainer {
@@ -129,7 +129,7 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
   return (
     <Drawer open={isOpen} onOpenChange={onOpenChange}>
       <DrawerContent className="max-h-[90vh] overflow-y-auto">
-        <DrawerHeader className="relative px-4 py-3 sm:px-6">
+        <DrawerHeader className="relative px-4 py-3 sm:px-6 container max-w-screen-sm mx-auto">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
               {course.category && (
@@ -145,8 +145,11 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
                 variant="outline"
                 className="bg-green-50 text-green-700 border-green-100 text-xs"
               >
-                <DollarSign className="w-3 h-3 mr-1" />$
-                {parseFloat(course.price).toFixed(2)}
+                <Coins className="w-3 h-3 mr-1" />
+                {new Intl.NumberFormat("uz-UZ").format(
+                  parseFloat(course.price)
+                )}{" "}
+                UZS
               </Badge>
             </div>
             <DrawerClose className="rounded-full p-1.5 hover:bg-gray-100">
@@ -163,7 +166,7 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
 
         <Separator />
 
-        <div className="px-4 py-4 sm:px-6">
+        <div className="px-4 py-4 sm:px-6 container max-w-screen-sm mx-auto">
           {/* Trainers Section */}
           {course.trainers && course.trainers.length > 0 && (
             <div className="mb-6">
@@ -201,7 +204,7 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
 
           {/* Lessons Preview Section */}
           {course.parts && course.parts.length > 0 && (
-            <div>
+            <div className="container max-w-screen-sm mx-auto">
               <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3">
                 {t("lessons_preview")}
               </h3>
@@ -289,7 +292,7 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
           )}
         </div>
 
-        <DrawerFooter className="px-4 py-3 sm:px-6">
+        <DrawerFooter className="px-4 py-3 sm:px-6 container max-w-screen-sm mx-auto">
           {isEnrolled ? (
             // If enrolled, show "Continue Learning" button that triggers onEnroll function
             <Button

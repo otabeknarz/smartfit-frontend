@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, DollarSign, Tag } from "lucide-react";
+import { Users, Tag, Coins } from "lucide-react";
 import type { Course } from "@/types/course";
 
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -173,8 +173,11 @@ const CoursesList: React.FC<CoursesListProps> = ({
                   variant="outline"
                   className="bg-green-50 text-green-700 border-green-100 text-xs"
                 >
-                  <DollarSign className="w-3 h-3 mr-1" />$
-                  {parseFloat(course.price).toFixed(2)}
+                  <Coins className="w-3 h-3 mr-1" />
+                  {new Intl.NumberFormat("uz-UZ").format(
+                    parseFloat(course.price)
+                  )}{" "}
+                  UZS
                 </Badge>
               </div>
 

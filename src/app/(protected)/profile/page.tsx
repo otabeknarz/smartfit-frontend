@@ -3,7 +3,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Navbar from "@/components/navbar";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,16 @@ import { useEffect, useState } from "react";
 import { axiosInstance } from "@/lib/apiService";
 import { API_URLS } from "@/constants/api";
 import { LanguageSelector } from "@/components/LanguageSelector";
+
+interface UserData {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  languageCode?: string;
+  isPremium?: boolean;
+  photo_url?: string;
+}
 
 interface Session {
   ip_address: string;
@@ -78,6 +88,27 @@ export default function ProfilePage() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoadingSessions, setIsLoadingSessions] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [userData, setUserData] = useState<UserData>({});
+
+  useEffect(() => {
+    if (window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+
+      const user = tg.initDataUnsafe?.user;
+      if (user) {
+        setUserData({
+          id: user.id,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          username: user.username,
+          languageCode: user.language_code,
+          isPremium: user.is_premium,
+          photo_url: user.photo_url,
+        });
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -120,11 +151,13 @@ export default function ProfilePage() {
           {/* Profile Header */}
           <div className="flex flex-col items-center gap-4 pb-6 border-b">
             <Avatar className="h-24 w-24 border-2 border-primary/10">
+              <AvatarImage
+                src={userData?.photo_url}
+                alt={userData?.firstName || "User"}
+                className="object-cover"
+              />
               <AvatarFallback className="bg-primary/10 text-primary text-2xl">
-                {user.name
-                  ?.split(" ")
-                  .map((n: string) => n[0])
-                  .join("")}
+                {user.name?.[0]?.toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
             <div className="text-center">
@@ -330,10 +363,7 @@ export default function ProfilePage() {
 
                       <div className="text-xs text-gray-400 pt-1">
                         {t("started")}{" "}
-                        {format(
-                          new Date(session.created_at),
-                          "MMM d, yyyy"
-                        )}
+                        {format(new Date(session.created_at), "MMM d, yyyy")}
                       </div>
                     </div>
                   );

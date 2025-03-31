@@ -24,6 +24,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Lesson {
   id: string;
@@ -90,6 +91,8 @@ const sampleComments: Comment[] = [
 ];
 
 function CommentItem({ comment }: { comment: Comment }) {
+  const { t } = useLanguage();
+
   return (
     <div className="flex gap-3 p-4 hover:bg-gray-50 transition-colors">
       <Avatar className="h-9 w-9">
@@ -101,9 +104,13 @@ function CommentItem({ comment }: { comment: Comment }) {
       <div className="flex-1 space-y-1">
         <div className="flex items-center justify-between">
           <p className="text-sm font-medium text-gray-800">
-            {comment.user.name}
+            {comment.user.name === "You" ? t("you") : comment.user.name}
           </p>
-          <span className="text-xs text-gray-500">{comment.timestamp}</span>
+          <span className="text-xs text-gray-500">
+            {comment.timestamp === "Just now"
+              ? t("just_now")
+              : comment.timestamp}
+          </span>
         </div>
         <p className="text-sm text-gray-600">{comment.text}</p>
       </div>
@@ -111,9 +118,10 @@ function CommentItem({ comment }: { comment: Comment }) {
   );
 }
 
-function CommentsDrawer({ commentCount }: { commentCount: number }) {
+function CommentsDrawer({ commentCount }: { commentCount?: number }) {
   const [comments, setComments] = useState<Comment[]>(sampleComments);
   const [newComment, setNewComment] = useState("");
+  const { t } = useLanguage();
 
   const handleAddComment = () => {
     if (!newComment.trim()) return;
@@ -144,7 +152,9 @@ function CommentsDrawer({ commentCount }: { commentCount: number }) {
       <DrawerContent className="max-h-[96vh] container mx-auto max-w-screen-sm">
         <DrawerHeader className="border-b border-gray-100">
           <div className="flex items-center justify-between px-4">
-            <DrawerTitle>Comments ({comments.length})</DrawerTitle>
+            <DrawerTitle>
+              {t("comments")} {/* ({comments.length}) */}
+            </DrawerTitle>
             <DrawerClose asChild>
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                 <X className="w-4 h-4" />
@@ -155,22 +165,29 @@ function CommentsDrawer({ commentCount }: { commentCount: number }) {
 
         <div className="flex flex-col h-[calc(100vh-10rem)]">
           {/* Comments List */}
-          <ScrollArea className="flex-1">
+
+          <div className="flex flex-1 items-center justify-center">
+            <h1 className="font-semibold text-xl">
+              {t("comments_will_be_soon")} ⏳
+            </h1>
+          </div>
+
+          {/* <ScrollArea className="flex-1">
             <div className="divide-y divide-gray-100">
               {comments.map((comment) => (
                 <CommentItem key={comment.id} comment={comment} />
               ))}
             </div>
-          </ScrollArea>
+          </ScrollArea> */}
 
           {/* Comment Input */}
-          <div className="p-4 border-t border-gray-100 bg-white">
+          {/* <div className="p-4 border-t border-gray-100 bg-white">
             <div className="flex items-center gap-2">
               <input
                 type="text"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add a comment..."
+                placeholder={t("add_a_comment")}
                 className="flex-1 px-4 py-2 text-sm border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -186,7 +203,7 @@ function CommentsDrawer({ commentCount }: { commentCount: number }) {
                 <Send className="w-4 h-4" />
               </Button>
             </div>
-          </div>
+          </div> */}
         </div>
       </DrawerContent>
     </Drawer>
@@ -248,6 +265,8 @@ function VideoNavigation({
   navigation: VideoProps["navigation"];
   onNavigation: VideoProps["onNavigation"];
 }) {
+  const { t } = useLanguage();
+
   return (
     <div>
       {/* Navigation Labels */}
@@ -277,8 +296,8 @@ function VideoNavigation({
             onClick={() => onNavigation("previous")}
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Previous</span>
-            <span className="sm:hidden">Prev</span>
+            <span className="hidden sm:inline">{t("previous_lesson")}</span>
+            <span className="sm:hidden">{t("previous_lesson")}</span>
           </Button>
         )}
 
@@ -287,7 +306,7 @@ function VideoNavigation({
             className="flex items-center justify-center gap-2 flex-1"
             onClick={() => onNavigation("next")}
           >
-            <span>Next</span>
+            <span>{t("next_lesson")}</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
         )}
@@ -303,6 +322,7 @@ export default function Video({
   onNavigation,
 }: VideoProps) {
   const [userRating, setUserRating] = useState<number | undefined>(undefined);
+  const { t } = useLanguage();
 
   const handleRate = (rating: number) => {
     setUserRating(rating);
@@ -315,7 +335,7 @@ export default function Video({
     name: "Sarah Johnson",
     avatar: "/fitness-1.png",
     initials: "SJ",
-    role: "Certified Fitness Trainer",
+    role: t("certified_fitness_trainer"),
   };
 
   return (
@@ -323,16 +343,22 @@ export default function Video({
       <div className="container mx-auto max-w-screen-sm p-4">
         {/* Video Player */}
         <div className="relative aspect-video w-full bg-gray-900 rounded-xl overflow-hidden shadow-lg">
-          <iframe
-            src={lesson.video_url}
-            style={{
-              height: "100%",
-              width: "100%",
-              maxWidth: "100%",
-            }}
-            allowFullScreen={true}
-            allow="encrypted-media"
-          ></iframe>
+          {lesson.video_url ? (
+            <iframe
+              src={lesson.video_url}
+              style={{
+                height: "100%",
+                width: "100%",
+                maxWidth: "100%",
+              }}
+              allowFullScreen={true}
+              allow="encrypted-media"
+            ></iframe>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-white">{t("video_playing_placeholder")}</p>
+            </div>
+          )}
         </div>
 
         {/* Video Info */}
@@ -362,21 +388,20 @@ export default function Video({
                   </p>
                 </div>
               </div>
-              <CommentsDrawer commentCount={89} />
+              <CommentsDrawer />
             </div>
           </div>
 
           {/* Description */}
           <p className="text-sm text-gray-600 leading-relaxed">
-            {lesson.description ||
-              "Start your fitness journey with this comprehensive workout."}
+            {lesson.description || t("default_video_description")}
           </p>
 
           {/* Rating section - commented out for now */}
           {/* <div className="bg-gray-50 rounded-xl p-4">
             <div className="flex flex-col items-center gap-2 text-center">
               <h3 className="text-sm font-medium text-gray-800">
-                {userRating ? "Your Rating" : "Rate this video"}
+                {userRating ? t("your_rating") : t("rate_this_video")}
               </h3>
               <RatingStars
                 rating={userRating || 4.7}
@@ -387,17 +412,17 @@ export default function Video({
                   {4.7.toFixed(1)}
                 </span>
                 <span>•</span>
-                <span>{128} ratings</span>
+                <span>{128} {t("ratings")}</span>
                 {userRating && (
                   <>
                     <span>•</span>
                     <Button
                       variant="ghost"
                       size="sm"
+                      className="text-xs h-auto py-1 px-2 text-gray-500 hover:text-gray-700"
                       onClick={() => setUserRating(undefined)}
-                      className="text-primary hover:text-primary/90 px-2 h-auto"
                     >
-                      Remove rating
+                      {t("clear")}
                     </Button>
                   </>
                 )}

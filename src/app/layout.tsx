@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 
-const poppinsFont = Poppins({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-  variable: "--font-poppins",
+const poppinsFont = Open_Sans({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-open-sans",
 });
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "SmartFit",
@@ -32,7 +29,7 @@ export default function RootLayout({
         <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
       </head>
       <body
-        className={`${poppinsFont.variable} antialiased font-[family-name:var(--font-poppins)] ${inter.className}`}
+        className={`${poppinsFont.variable} antialiased font-[family-name:var(--font-open-sans)]`}
       >
         <AuthProvider>
           <LanguageProvider>

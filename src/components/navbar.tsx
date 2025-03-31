@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChevronLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface UserData {
   id?: number;
@@ -29,6 +30,7 @@ export default function Navbar({
   const pathname = usePathname();
   const isHome = pathname === "/home" || pathname === "/";
   const { t } = useLanguage();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (window.Telegram?.WebApp) {
@@ -69,7 +71,7 @@ export default function Navbar({
                 <Image src="/logo.png" alt="Logo" width={32} height={32} />
               ) : null}
               <div>
-                <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
+                <h1 className="text-lg font-bold text-gray-800">{title}</h1>
                 {userData.firstName && (
                   <p className="text-xs text-gray-500">
                     {t("welcome_back")}, {userData.firstName}
@@ -84,11 +86,11 @@ export default function Navbar({
               <Avatar className="h-9 w-9 ring-2 ring-gray-100 transition-transform hover:scale-105">
                 <AvatarImage
                   src={userData?.photo_url}
-                  alt={userData?.firstName || "User"}
+                  alt={user?.name || "User"}
                   className="object-cover"
                 />
                 <AvatarFallback className="bg-primary/10 text-primary text-sm">
-                  {userData?.firstName?.[0]?.toUpperCase() || "U"}
+                  {user?.name?.[0]?.toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
             </div>

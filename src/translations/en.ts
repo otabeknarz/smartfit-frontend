@@ -43,7 +43,8 @@ const translations = {
   // Shop related
   shop: "Shop",
   shop_coming_soon: "Our Shop is Coming Soon",
-  shop_coming_soon_message: "We're working hard to bring you premium fitness products and supplements. Stay tuned for our grand opening!",
+  shop_coming_soon_message:
+    "We're working hard to bring you premium fitness products and supplements. Stay tuned for our grand opening!",
   launch_date: "Launch Date",
   summer_2025: "Summer 2025",
   get_notified: "Get Notified",
@@ -91,6 +92,36 @@ const translations = {
   no_title: "No title",
   course_not_found: "Course not found",
 
+  // Lesson page
+  error_loading_lesson: "Error Loading Lesson",
+  lesson_not_found: "Lesson or course not found",
+  back_to_course: "Back to Course",
+  premium_lesson_description:
+    "This is a premium lesson. You need to enroll in the course to view it.",
+  content_locked: "Content Locked",
+  enroll_to_access: "You need to enroll in this course to access this lesson",
+  instructor: "Instructor",
+  course_content: "Course Content",
+  lesson_description: "Lesson Description",
+
+  // Video component
+  comments: "Comments",
+  add_a_comment: "Add a comment...",
+  comments_will_be_soon: "Comments will be soon",
+  you: "You",
+  just_now: "Just now",
+  previous_lesson: "Previous Lesson",
+  next_lesson: "Next Lesson",
+  video_playing_placeholder: "Video is playing",
+  default_video_description:
+    "Start your fitness journey with this comprehensive workout.",
+  your_rating: "Your Rating",
+  rate_this_video: "Rate this video",
+  ratings: "ratings",
+  clear: "Clear",
+  certified_fitness_trainer: "Certified Fitness Trainer",
+  out_of_5: "out of 5",
+
   // Auth related
   login: "Login",
   login_with_telegram: "Login with Telegram",
@@ -125,7 +156,8 @@ const translations = {
 
   // Onboarding
   welcome_to_smartfit: "Welcome to SmartFit",
-  personal_fitness_journey: "Your personal fitness journey starts here. Access premium fitness courses through Telegram, no app installation needed.",
+  personal_fitness_journey:
+    "Your personal fitness journey starts here. Access premium fitness courses through Telegram, no app installation needed.",
   get_started: "Get Started",
   whats_your_gender: "What's your gender?",
   personalize_fitness_journey: "This helps us personalize your fitness journey",

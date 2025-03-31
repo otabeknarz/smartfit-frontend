@@ -13,15 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Calendar,
-  Clock,
-  DollarSign,
-  Lock,
-  Play,
-  Unlock,
-  User,
-} from "lucide-react";
+import { Calendar, Clock, Coins, Lock, Play, Unlock, User } from "lucide-react";
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -83,7 +75,7 @@ interface Course {
 
 function notFound() {
   const { t } = useLanguage();
-  
+
   return (
     <>
       <Navbar title={t("no_title")} />
@@ -129,30 +121,9 @@ export default function CoursePage() {
 
   console.log(course);
 
+  // TODO: have to make payments here
   const handleEnrollment = async () => {
-    if (!course) return;
-
-    setIsEnrolling(true);
-    try {
-      // Here you would implement the actual enrollment logic
-      // This would likely be an API call to your backend
-      const response = await axiosInstance.post(
-        `/courses/enroll/${course.id}/`
-      );
-
-      // On successful enrollment, refresh the course data
-      const updatedCourse = await axiosInstance.get(
-        `/courses/get-course/${slug}/`
-      );
-      setCourse(updatedCourse.data);
-
-      // Optional: Show some success message or redirect to course content
-    } catch (error) {
-      console.error("Error enrolling in course:", error);
-      // Optional: Show error message to the user
-    } finally {
-      setIsEnrolling(false);
-    }
+    await router.push("https://t.me/otabek_narz");
   };
 
   if (!course) {
@@ -202,8 +173,13 @@ export default function CoursePage() {
                       </span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <DollarSign size={16} />
-                      <span>${parseFloat(course.price).toFixed(2)}</span>
+                      <Coins size={16} />
+                      <span>
+                        {new Intl.NumberFormat("uz-UZ").format(
+                          parseFloat(course.price)
+                        )}{" "}
+                        UZS
+                      </span>
                     </div>
                     {course.is_enrolled && (
                       <Badge
@@ -222,25 +198,14 @@ export default function CoursePage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2">
-              <Tabs defaultValue="overview" className="w-full">
+              <Tabs defaultValue="curriculum" className="w-full">
                 <TabsList className="mb-6 w-full justify-start">
+                  <TabsTrigger value="curriculum">
+                    {t("curriculum")}
+                  </TabsTrigger>
                   <TabsTrigger value="overview">{t("overview")}</TabsTrigger>
-                  <TabsTrigger value="curriculum">{t("curriculum")}</TabsTrigger>
                   <TabsTrigger value="trainers">{t("trainers")}</TabsTrigger>
                 </TabsList>
-
-                <TabsContent value="overview" className="space-y-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>{t("about_this_course")}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-700 leading-relaxed">
-                        {course.description}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
 
                 <TabsContent value="curriculum" className="space-y-6">
                   <Card>
@@ -311,13 +276,26 @@ export default function CoursePage() {
                                       </div>
                                       <div className="flex items-center gap-2 text-sm text-gray-500">
                                         <Clock size={14} />
-                                        <span>{lesson.duration}</span>
+                                        <span>{lesson.duration.slice(3)}</span>
                                       </div>
                                     </div>
                                   ))}
                               </div>
                             </div>
                           ))}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="overview" className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{t("about_this_course")}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-700 leading-relaxed">
+                        {course.description}
+                      </p>
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -369,8 +347,14 @@ export default function CoursePage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {!course.is_enrolled && (
-                    <div className="text-3xl font-bold">
-                      ${parseFloat(course.price).toFixed(2)}
+                    <div className="text-3xl font-bold flex items-center gap-2">
+                      <Coins />
+                      <span>
+                        {new Intl.NumberFormat("uz-UZ").format(
+                          parseFloat(course.price)
+                        )}{" "}
+                        UZS
+                      </span>
                     </div>
                   )}
 
@@ -398,10 +382,6 @@ export default function CoursePage() {
                         )}{" "}
                         {t("lessons")}
                       </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar size={16} className="text-gray-500" />
-                      <span>{t("lifetime_access")}</span>
                     </div>
                   </div>
                 </CardContent>
