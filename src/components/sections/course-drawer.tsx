@@ -172,9 +172,6 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
           <DrawerTitle className="text-xl sm:text-2xl font-bold text-gray-900">
             {course.title}
           </DrawerTitle>
-          <DrawerDescription className="mt-1 text-sm">
-            {course.description}
-          </DrawerDescription>
         </DrawerHeader>
 
         <Separator />
