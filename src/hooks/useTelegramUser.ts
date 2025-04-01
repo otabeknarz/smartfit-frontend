@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getTelegramUser } from "@/utils/telegram";
 
 export interface TelegramUser {
   id?: number;
@@ -18,34 +19,21 @@ export function useTelegramUser(): TelegramUser {
 
   useEffect(() => {
     try {
-      // Check if we're running in Telegram environment
-      if (typeof window !== "undefined" && window.Telegram?.WebApp) {
-        const tg = window.Telegram.WebApp;
-        
-        // Call ready() to tell Telegram that our app is ready
+      // Call ready() to tell Telegram that our app is ready
+      if (typeof window !== "undefined" && window.Telegram?.WebApp?.ready) {
         try {
-          tg.ready();
+          window.Telegram.WebApp.ready();
         } catch (readyError) {
           console.warn("Error calling Telegram WebApp ready():", readyError);
         }
+      }
 
-        // Get user data from Telegram
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-          setUserData({
-            id: user.id,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            username: user.username,
-            languageCode: user.language_code,
-            isPremium: user.is_premium,
-            photoUrl: user.photo_url,
-          });
-        } else {
-          console.log("No user data available in Telegram WebApp");
-        }
+      // Get user data from Telegram
+      const user = getTelegramUser();
+      if (user) {
+        setUserData(user);
       } else {
-        console.log("Not running in Telegram environment");
+        console.log("No user data available in Telegram WebApp");
       }
     } catch (e) {
       console.error("Error in useTelegramUser hook:", e);

@@ -1,7 +1,7 @@
 "use client";
 
-import { init } from "@telegram-apps/sdk-react";
 import { ReactNode, useEffect, useState } from "react";
+import { initTelegramSDK } from "@/utils/telegram";
 
 interface TelegramSDKProviderProps {
   children: ReactNode;
@@ -17,7 +17,7 @@ export function TelegramSDKProvider({ children }: TelegramSDKProviderProps) {
     if (isTelegramEnvironment) {
       try {
         // Initialize the Telegram SDK only if we're in Telegram environment
-        init();
+        initTelegramSDK();
       } catch (error) {
         console.error("Failed to initialize Telegram SDK:", error);
         setInitError(error instanceof Error ? error : new Error(String(error)));
