@@ -24,6 +24,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { axiosInstance } from "@/lib/apiService";
+import { openTelegramLink } from "@/utils/telegram";
 
 interface Lesson {
   id: string;
@@ -347,16 +348,8 @@ export default function Video({
       );
 
       if (response.data.status === "success" && response.data.data.video_url) {
-        // Open in external browser
-        if (window.Telegram?.WebApp?.openTelegramLink) {
-          window.Telegram.WebApp.openTelegramLink(
-            response.data.data.video_url,
-            { tryInstantView: false }
-          );
-        } else {
-          // Fallback behavior, maybe open in same window
-          window.open(response.data.data.video_url, "_blank");
-        }
+        // Open in Telegram browser using our utility function
+        openTelegramLink(response.data.data.video_url, { tryInstantView: false });
       } else {
         setError(t("video_not_available"));
       }

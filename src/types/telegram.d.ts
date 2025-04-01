@@ -3,7 +3,7 @@ declare global {
     WebApp: {
       initData: string;
       ready: () => void;
-      openLink: (link: any) => void;
+      openLink: (link: string) => void;
       openTelegramLink: (link: string, options?: { tryInstantView?: boolean }) => void;
       initDataUnsafe: {
         user?: {

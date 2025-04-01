@@ -7,6 +7,7 @@ import { ChevronLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTelegramUser } from "@/hooks/useTelegramUser";
 
 interface UserData {
   id?: number;
@@ -31,26 +32,21 @@ export default function Navbar({
   const isHome = pathname === "/home" || pathname === "/";
   const { t } = useLanguage();
   const { user } = useAuth();
+  const telegramUser = useTelegramUser();
 
   useEffect(() => {
-    if (window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-
-      const user = tg.initDataUnsafe?.user;
-      if (user) {
-        setUserData({
-          id: user.id,
-          firstName: user.first_name,
-          lastName: user.last_name,
-          username: user.username,
-          languageCode: user.language_code,
-          isPremium: user.is_premium,
-          photo_url: user.photo_url,
-        });
-      }
+    if (telegramUser.id) {
+      setUserData({
+        id: telegramUser.id,
+        firstName: telegramUser.firstName,
+        lastName: telegramUser.lastName,
+        username: telegramUser.username,
+        languageCode: telegramUser.languageCode,
+        isPremium: telegramUser.isPremium,
+        photo_url: telegramUser.photoUrl,
+      });
     }
-  }, []);
+  }, [telegramUser]);
 
   return (
     <>
