@@ -27,7 +27,6 @@ import { useEffect, useState } from "react";
 import { axiosInstance } from "@/lib/apiService";
 import { API_URLS } from "@/constants/api";
 import { LanguageSelector } from "@/components/LanguageSelector";
-import { useTelegramUser } from "@/hooks/useTelegramUser";
 
 interface UserData {
   id?: number;
@@ -90,21 +89,26 @@ export default function ProfilePage() {
   const [isLoadingSessions, setIsLoadingSessions] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [userData, setUserData] = useState<UserData>({});
-  const telegramUser = useTelegramUser();
 
   useEffect(() => {
-    if (telegramUser.id) {
-      setUserData({
-        id: telegramUser.id,
-        firstName: telegramUser.firstName,
-        lastName: telegramUser.lastName,
-        username: telegramUser.username,
-        languageCode: telegramUser.languageCode,
-        isPremium: telegramUser.isPremium,
-        photo_url: telegramUser.photoUrl,
-      });
+    if (window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+
+      const user = tg.initDataUnsafe?.user;
+      if (user) {
+        setUserData({
+          id: user.id,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          username: user.username,
+          languageCode: user.language_code,
+          isPremium: user.is_premium,
+          photo_url: user.photo_url,
+        });
+      }
     }
-  }, [telegramUser]);
+  }, []);
 
   useEffect(() => {
     const fetchSessions = async () => {

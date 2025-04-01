@@ -3,21 +3,20 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { useTelegramUser } from "@/hooks/useTelegramUser";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
   const router = useRouter();
   const { t } = useLanguage();
-  const telegramUser = useTelegramUser();
 
   useEffect(() => {
     const handleTelegramLogin = async () => {
-      if (telegramUser.id) {
+      const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+      if (telegramUser) {
         try {
-          await login(telegramUser.id.toString());
+          await login(telegramUser?.id.toString());
           router.push("/home");
         } catch (error: any) {
           alert(error.response?.data?.error || t("login_failed"));
@@ -30,7 +29,7 @@ export default function LoginPage() {
     if (!isAuthenticated) {
       handleTelegramLogin();
     }
-  }, [isAuthenticated, login, router, t, telegramUser]);
+  }, [isAuthenticated, login, router, t]);
 
   if (isAuthenticated) {
     router.push("/home");
