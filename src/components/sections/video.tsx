@@ -351,6 +351,7 @@ export default function Video({
         // Open in Telegram browser using our utility function
         openLink(response.data.data.video_url, {
           tryInstantView: false,
+          tryBrowser: "chrome",
         });
       } else {
         setError(t("video_not_available"));
