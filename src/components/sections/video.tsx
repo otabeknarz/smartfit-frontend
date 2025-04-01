@@ -1,11 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import {
   Play,
   MessageCircle,
-  Clock,
-  Send,
   X,
   Star,
   StarHalf,
@@ -23,7 +20,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
