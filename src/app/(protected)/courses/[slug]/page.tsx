@@ -22,7 +22,6 @@ import {
   Unlock,
   User,
   ExternalLink,
-  Send,
 } from "lucide-react";
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -213,20 +212,6 @@ export default function CoursePage() {
                   </div>
                 </div>
               </div>
-            </div>
-            {/* Course Image */}
-            <div className="w-full h-48 mb-4 overflow-hidden rounded-lg">
-              {course.thumbnail ? (
-                <img
-                  src={`https://api.smart-fit.uz${course.thumbnail}`}
-                  alt={course.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-400">No image available</span>
-                </div>
-              )}
             </div>
           </div>
 
