@@ -2,8 +2,7 @@
 
 import Navbar from "@/components/navbar";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ShoppingBag, Clock, CalendarClock } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ShoppingBag, CalendarClock } from "lucide-react";
 
 export default function ShopPage() {
   const { t } = useLanguage();
@@ -23,23 +22,16 @@ export default function ShopPage() {
               {t("shop_coming_soon_message")}
             </p>
           </div>
-          
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+
+          <div className="flex justify-center">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 w-1/2">
               <CalendarClock className="w-8 h-8 text-primary/80 mb-3 mx-auto" />
-              <h3 className="font-medium text-gray-900 mb-1">{t("launch_date")}</h3>
+              <h3 className="font-medium text-gray-900 mb-1">
+                {t("launch_date")}
+              </h3>
               <p className="text-gray-500 text-sm">{t("summer_2025")}</p>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <Clock className="w-8 h-8 text-primary/80 mb-3 mx-auto" />
-              <h3 className="font-medium text-gray-900 mb-1">{t("get_notified")}</h3>
-              <p className="text-gray-500 text-sm">{t("early_access")}</p>
-            </div>
           </div>
-          
-          <Button className="px-8 py-6 h-auto text-base">
-            {t("notify_me")}
-          </Button>
         </div>
       </div>
     </>

@@ -11,6 +11,8 @@ import {
   StarHalf,
   ArrowLeft,
   ArrowRight,
+  ExternalLink,
+  AlertCircle,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -25,12 +27,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { axiosInstance } from "@/lib/apiService";
 
 interface Lesson {
   id: string;
   title: string;
   description: string;
-  video_url: string;
   duration: string;
   is_free_preview: boolean;
   order: number;
@@ -322,6 +324,8 @@ export default function Video({
   onNavigation,
 }: VideoProps) {
   const [userRating, setUserRating] = useState<number | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { t } = useLanguage();
 
   const handleRate = (rating: number) => {
@@ -338,27 +342,54 @@ export default function Video({
     role: t("certified_fitness_trainer"),
   };
 
+  const handlePlayVideo = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await axiosInstance.get(`/courses/get-one-time-video-token/${lesson.id}/`);
+      
+      if (response.data.status === "success" && response.data.data.video_url) {
+        // Open in external browser
+        window.open(response.data.data.video_url, "_blank");
+      } else {
+        setError(t("video_not_available"));
+      }
+    } catch (error) {
+      console.error("Error fetching video token:", error);
+      setError(t("error_loading_video"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <section className="bg-background">
       <div className="container mx-auto max-w-screen-sm p-4">
         {/* Video Player */}
         <div className="relative aspect-video w-full bg-gray-900 rounded-xl overflow-hidden shadow-lg">
-          {lesson.video_url ? (
-            <iframe
-              src={lesson.video_url}
-              style={{
-                height: "100%",
-                width: "100%",
-                maxWidth: "100%",
-              }}
-              allowFullScreen={true}
-              allow="encrypted-media"
-            ></iframe>
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-white">{t("video_playing_placeholder")}</p>
-            </div>
-          )}
+          <div className="flex flex-col items-center justify-center h-full">
+            {error && (
+              <div className="bg-red-500/10 text-red-500 p-3 rounded-lg mb-4 flex items-center gap-2">
+                <AlertCircle className="w-5 h-5" />
+                <span>{error}</span>
+              </div>
+            )}
+            <Button 
+              size="lg" 
+              className="flex items-center gap-2 mb-2"
+              onClick={handlePlayVideo}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+              ) : (
+                <Play className="w-5 h-5" />
+              )}
+              <span>{t("play_video")}</span>
+              <ExternalLink className="w-4 h-4 ml-1" />
+            </Button>
+            <p className="text-white text-sm opacity-70">{t("opens_in_external_browser")}</p>
+          </div>
         </div>
 
         {/* Video Info */}

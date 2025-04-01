@@ -121,6 +121,10 @@ const translations = {
   clear: "Clear",
   certified_fitness_trainer: "Certified Fitness Trainer",
   out_of_5: "out of 5",
+  play_video: "Play Video",
+  opens_in_external_browser: "Opens in external browser",
+  video_not_available: "Video is not available",
+  error_loading_video: "Error loading video",
 
   // Auth related
   login: "Login",

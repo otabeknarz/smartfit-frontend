@@ -131,6 +131,10 @@ const translations = {
   clear: "Очистить",
   certified_fitness_trainer: "Сертифицированный фитнес-тренер",
   out_of_5: "из 5",
+  play_video: "Воспроизвести видео",
+  opens_in_external_browser: "Открывается во внешнем браузере",
+  video_not_available: "Видео недоступно",
+  error_loading_video: "Ошибка загрузки видео",
 
   // Meal related
   todays_meal: "Сегодняшнее питание",
