@@ -16,12 +16,9 @@ import { Badge } from "@/components/ui/badge";
 import {
   ArrowLeft,
   CheckCircle2,
-  ChevronDown,
-  ChevronRight,
   ClipboardList,
   Lock,
   Play,
-  Coins,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
