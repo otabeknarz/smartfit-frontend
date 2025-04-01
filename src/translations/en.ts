@@ -91,6 +91,9 @@ const translations = {
   lifetime_access: "Lifetime access",
   no_title: "No title",
   course_not_found: "Course not found",
+  contact_sales: "Contact Sales",
+  contact_sales_message: "Please contact our sales manager to enroll in this course",
+  contact: "Contact",
 
   // Lesson page
   error_loading_lesson: "Error Loading Lesson",

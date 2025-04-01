@@ -101,6 +101,9 @@ const translations = {
   lifetime_access: "Пожизненный доступ",
   no_title: "Без названия",
   course_not_found: "Курс не найден",
+  contact_sales: "Связаться с отделом продаж",
+  contact_sales_message: "Пожалуйста, свяжитесь с нашим менеджером по продажам, чтобы записаться на этот курс",
+  contact: "Связаться",
 
   // Lesson page
   error_loading_lesson: "Ошибка загрузки урока",

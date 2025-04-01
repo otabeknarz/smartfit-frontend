@@ -13,10 +13,28 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, Coins, Lock, Play, Unlock, User } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  Coins,
+  Lock,
+  Play,
+  Unlock,
+  User,
+  ExternalLink,
+  Send,
+} from "lucide-react";
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 // Interfaces based on the provided data
 interface Category {
@@ -99,6 +117,7 @@ export default function CoursePage() {
   const [course, setCourse] = useState<Course | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [isEnrolling, setIsEnrolling] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
   const router = useRouter();
   const { slug } = useParams<{ slug: string }>();
   const { t } = useLanguage();
@@ -121,9 +140,9 @@ export default function CoursePage() {
 
   console.log(course);
 
-  // TODO: have to make payments here
-  const handleEnrollment = async () => {
-    await router.push("https://t.me/otabek_narz");
+  // Handle contact with sales manager
+  const handleContactSales = () => {
+    window.open("https://t.me/otabek_narz", "_blank");
   };
 
   if (!course) {
@@ -363,13 +382,42 @@ export default function CoursePage() {
                       {t("continue_learning")}
                     </Button>
                   ) : (
-                    <Button
-                      className="w-full"
-                      onClick={handleEnrollment}
-                      disabled={isEnrolling}
+                    <Dialog
+                      open={contactModalOpen}
+                      onOpenChange={setContactModalOpen}
                     >
-                      {isEnrolling ? t("processing") : t("enroll_now")}
-                    </Button>
+                      <DialogTrigger asChild>
+                        <Button className="w-full">{t("enroll_now")}</Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>{t("contact_sales")}</DialogTitle>
+                          <DialogDescription>
+                            {t("contact_sales_message")}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="flex items-center justify-center mt-4 mb-2">
+                          <div className="flex flex-col items-center">
+                            <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden">
+                              <User size={32} />
+                            </div>
+                            <p className="mt-1 font-medium">Telegram:</p>
+                            <p className="font-semibold text-xl mt-2">
+                              @otabek_narz
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex justify-center mt-4">
+                          <Button
+                            onClick={handleContactSales}
+                            className="gap-2"
+                          >
+                            {t("contact")}
+                            <ExternalLink className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   )}
 
                   <div className="space-y-3 text-sm">
