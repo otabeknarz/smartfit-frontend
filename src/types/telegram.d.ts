@@ -4,7 +4,7 @@ declare global {
       initData: string;
       ready: () => void;
       openLink: (link: any) => void;
-      openTelegramLink: (link: string) => void;
+      openTelegramLink: (link: string, options?: { tryInstantView?: boolean }) => void;
       initDataUnsafe: {
         user?: {
           id: number;
