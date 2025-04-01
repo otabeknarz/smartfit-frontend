@@ -105,6 +105,14 @@ const CoursesList: React.FC<CoursesListProps> = ({
     return "/fitness-1.png";
   };
 
+  // Function to get the course image (thumbnail or placeholder)
+  const getCourseImage = (course: Course) => {
+    if (course.thumbnail) {
+      return `https://api.smart-fit.uz${course.thumbnail}`;
+    }
+    return getCoursePlaceholderImage(course);
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
       {courses.map((course) => {
@@ -121,7 +129,7 @@ const CoursesList: React.FC<CoursesListProps> = ({
             <div className="relative">
               <div className="w-full h-32 sm:h-40 bg-gray-200 overflow-hidden">
                 <img
-                  src={getCoursePlaceholderImage(course)}
+                  src={getCourseImage(course)}
                   alt={course.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />

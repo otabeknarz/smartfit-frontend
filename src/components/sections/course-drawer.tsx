@@ -31,6 +31,7 @@ interface Trainer {
   age?: number;
   height?: number;
   date_joined?: string;
+  picture?: string;
 }
 
 interface Lesson {
@@ -80,7 +81,9 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
 
   // Function to get trainer profile image URL or a default placeholder
   const getTrainerAvatarUrl = (trainer: Trainer) => {
-    if (trainer.gender === "FEMALE") {
+    if (trainer.picture) {
+      return `https://api.smart-fit.uz${trainer.picture}`;
+    } else if (trainer.gender === "FEMALE") {
       return "/female-trainer.png";
     } else if (trainer.gender === "MALE") {
       return "/male-trainer.png";
@@ -130,6 +133,16 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
     <Drawer open={isOpen} onOpenChange={onOpenChange}>
       <DrawerContent className="max-h-[90vh] overflow-y-auto">
         <DrawerHeader className="relative px-4 py-3 sm:px-6 container max-w-screen-sm mx-auto">
+          {/* Course Thumbnail */}
+          {course.thumbnail && (
+            <div className="w-full h-48 mb-4 overflow-hidden rounded-lg">
+              <img
+                src={`https://api.smart-fit.uz${course.thumbnail}`}
+                alt={course.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
               {course.category && (
@@ -180,13 +193,21 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({
                     className="flex items-center gap-3 bg-gray-50 rounded-lg p-3"
                   >
                     <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                      <Avatar>
-                        <AvatarFallback>
-                          {trainer.name
-                            ? trainer.name.substring(0, 2).toUpperCase()
-                            : "TR"}
-                        </AvatarFallback>
-                      </Avatar>
+                      {trainer.picture ? (
+                        <img
+                          src={`https://api.smart-fit.uz${trainer.picture}`}
+                          alt={trainer.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <Avatar>
+                          <AvatarFallback>
+                            {trainer.name
+                              ? trainer.name.substring(0, 2).toUpperCase()
+                              : "TR"}
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-800">

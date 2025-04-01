@@ -48,6 +48,7 @@ interface Trainer {
   id: string;
   name: string;
   gender: "MALE" | "FEMALE";
+  picture: string;
 }
 
 interface Lesson {
@@ -89,6 +90,7 @@ interface Course {
   is_enrolled: boolean;
   created_at: string;
   updated_at: string;
+  thumbnail: string;
 }
 
 function notFound() {
@@ -212,6 +214,20 @@ export default function CoursePage() {
                 </div>
               </div>
             </div>
+            {/* Course Image */}
+            <div className="w-full h-48 mb-4 overflow-hidden rounded-lg">
+              {course.thumbnail ? (
+                <img
+                  src={`https://api.smart-fit.uz${course.thumbnail}`}
+                  alt={course.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-gray-400">No image available</span>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -330,8 +346,16 @@ export default function CoursePage() {
                           key={trainer.id}
                           className="flex items-start gap-4 p-4 rounded-lg border mb-4"
                         >
-                          <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden">
-                            <User size={32} />
+                          <div className="h-16 w-16 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center text-gray-500">
+                            {trainer.picture ? (
+                              <img
+                                src={`https://api.smart-fit.uz${trainer.picture}`}
+                                alt={trainer.name}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <User size={32} />
+                            )}
                           </div>
                           <div>
                             <h3 className="font-semibold text-lg">

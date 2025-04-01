@@ -109,6 +109,29 @@ export default function Courses({
   const [displayCourses, setDisplayCourses] = useState<Course[]>([]);
   const [showingEnrolled, setShowingEnrolled] = useState(true);
 
+  // Function to get a placeholder image for courses
+  const getCoursePlaceholderImage = (course: Course) => {
+    // You can implement logic to select different images based on course categories
+    if (course.category && course.category.name) {
+      const categoryName = course.category.name.toLowerCase();
+      if (categoryName.includes("yoga")) return "/yoga-1.jpg";
+      if (categoryName.includes("cardio")) return "/cardio-1.jpg";
+      if (categoryName.includes("strength")) return "/strength-1.jpg";
+      if (categoryName.includes("nutrition")) return "/nutrition-1.jpg";
+    }
+
+    // Default fallback
+    return "/fitness-1.png";
+  };
+
+  // Function to get the course image (thumbnail or placeholder)
+  const getCourseImage = (course: Course) => {
+    if (course.thumbnail) {
+      return `https://api.smart-fit.uz${course.thumbnail}`;
+    }
+    return getCoursePlaceholderImage(course);
+  };
+
   useEffect(() => {
     // Determine which courses to display
     if (myCourses.length > 0) {
@@ -251,7 +274,7 @@ export default function Courses({
                             {/* Image Container */}
                             <div className="relative aspect-video w-full overflow-hidden rounded-xl">
                               <Image
-                                src="/fitness-1.png"
+                                src={getCourseImage(course)}
                                 alt={course.title}
                                 width={500}
                                 height={500}
@@ -328,7 +351,7 @@ export default function Courses({
                             {/* Image Container */}
                             <div className="relative aspect-video w-full overflow-hidden rounded-xl">
                               <Image
-                                src="/fitness-1.png"
+                                src={getCourseImage(course)}
                                 alt={course.title}
                                 width={500}
                                 height={500}

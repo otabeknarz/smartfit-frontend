@@ -8,6 +8,7 @@ export interface Trainer {
   age?: number;
   height?: number;
   date_joined?: string;
+  picture?: string; // Added picture field for trainer profile image
 }
 
 export interface Lesson {
@@ -45,4 +46,6 @@ export interface Course {
   category: Category;
   trainers: Trainer[];
   parts: Part[];
+  is_enrolled?: boolean; // Optional field to indicate if user is enrolled
+  thumbnail?: string; // Added thumbnail field for course image
 }
