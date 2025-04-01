@@ -176,6 +176,21 @@ const translations = {
   height_helps_calculate: "This helps us calculate your fitness metrics",
   enter_your_height: "Enter your height",
   enter_valid_height: "Please enter a valid height between 100 and 250 cm",
+  experience_and_fitness_level: "Experience and Fitness Level",
+  have_you_done_sports_before: "Have you done sports before?",
+  never: "Never",
+  tried_irregularly: "Tried, but irregularly",
+  train_regularly: "Train regularly",
+  training_frequency_question: "How many times per week are you ready to train?",
+  training_frequency_description: "This helps us create a suitable training schedule for you",
+  twice_a_week: "2 times",
+  three_to_four_times: "3–4 times",
+  five_or_more: "5 or more",
+  trainer_consultation_question: "Would you like to get a personal consultation from a trainer?",
+  trainer_consultation_description: "Our trainers can help you achieve your goals faster",
+  yes: "Yes",
+  no: "No",
+  finish: "Finish",
 };
 
 export default translations;

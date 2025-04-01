@@ -1,27 +1,40 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Ruler } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useOnboarding } from "@/contexts/OnboardingContext";
 import { useState } from "react";
+import { UserCheck } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useOnboarding } from "@/contexts/OnboardingContext";
 
-export default function HeightPage() {
+type TrainerConsultation = "yes" | "no";
+
+export default function TrainerConsultationPage() {
   const router = useRouter();
-  const { setHeight } = useOnboarding();
-  const [value, setValue] = useState("");
-  const [error, setError] = useState("");
+  const { setConsultation } = useOnboarding();
+  const { t } = useLanguage();
+  const [selectedOption, setSelectedOption] =
+    useState<TrainerConsultation | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleContinue = () => {
-    const height = parseInt(value);
-    if (height < 100 || height > 250) {
-      setError("Please enter a valid height between 100 and 250 cm");
-      return;
+  const options = [
+    {
+      id: "yes",
+      label: t("yes"),
+    },
+    {
+      id: "no",
+      label: t("no"),
+    },
+  ];
+
+  const handleContinue = async () => {
+    setIsSubmitting(true);
+    if (selectedOption) {
+      setConsultation(selectedOption);
+      router.push("/onboarding/done");
     }
-
-    setHeight(height);
-    router.push("/onboarding/done");
+    setIsSubmitting(false);
   };
 
   return (
@@ -33,45 +46,57 @@ export default function HeightPage() {
       <div className="flex-1 flex flex-col p-6">
         <div className="flex-1 flex flex-col items-center justify-center max-w-md mx-auto text-center space-y-8">
           <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-            <Ruler className="w-10 h-10 text-primary" />
+            <UserCheck className="w-10 h-10 text-primary" />
           </div>
 
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold text-gray-900">
-              What's your height?
+              {t("trainer_consultation_question")}
             </h1>
             <p className="text-gray-500">
-              This helps us calculate your fitness metrics
+              {t("trainer_consultation_description")}
             </p>
           </div>
 
-          <div className="w-full space-y-4">
-            <div className="relative">
-              <Input
-                type="number"
-                placeholder="Enter your height"
-                value={value}
-                onChange={(e) => {
-                  setValue(e.target.value);
-                  setError("");
-                }}
-                className="text-center text-lg h-14 pr-12"
-              />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
-                cm
-              </span>
-            </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+          <div className="w-full space-y-3">
+            {options.map((option) => (
+              <button
+                key={option.id}
+                className={`w-full p-4 rounded-lg border text-left transition-all ${
+                  selectedOption === option.id
+                    ? "border-primary bg-primary/5 text-primary"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+                onClick={() =>
+                  setSelectedOption(option.id as TrainerConsultation)
+                }
+              >
+                <div className="flex items-center">
+                  <div
+                    className={`w-5 h-5 rounded-full border mr-3 flex items-center justify-center ${
+                      selectedOption === option.id
+                        ? "border-primary"
+                        : "border-gray-300"
+                    }`}
+                  >
+                    {selectedOption === option.id && (
+                      <div className="w-3 h-3 rounded-full bg-primary" />
+                    )}
+                  </div>
+                  <span className="font-medium">{option.label}</span>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
 
         <div className="mt-auto">
           <Button
             className="w-full h-14 text-lg"
-            disabled={!value}
+            disabled={!selectedOption || isSubmitting}
             onClick={handleContinue}
           >
-            Continue
+            {isSubmitting ? t("processing") : t("finish")}
           </Button>
         </div>
       </div>

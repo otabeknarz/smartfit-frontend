@@ -10,4 +10,5 @@ export const API_URLS = {
   CREATE_USER: "/users/create/",
   UPDATE_USER: (id: string) => `/users/update/${id}/`,
   GET_MY_SESSIONS: "/users/get-my-sessions/",
+  CREATE_ONBOARDING_ANSWERS: "/users/create-onboarding-answers/",
 };

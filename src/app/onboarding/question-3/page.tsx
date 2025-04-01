@@ -1,77 +1,100 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Ruler } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { useState } from "react";
+import { Dumbbell } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-export default function HeightPage() {
+type ExperienceLevel = "beginner" | "intermediate" | "advanced";
+
+export default function ExperiencePage() {
   const router = useRouter();
-  const { setHeight } = useOnboarding();
-  const [value, setValue] = useState("");
-  const [error, setError] = useState("");
+  const { setExperienceLevel } = useOnboarding();
+  const { t, language } = useLanguage();
+  const [selectedLevel, setSelectedLevel] = useState<ExperienceLevel | null>(
+    null
+  );
+
+  const experienceLevels = [
+    {
+      id: "beginner",
+      label: t("never"),
+    },
+    {
+      id: "intermediate",
+      label: t("tried_irregularly"),
+    },
+    {
+      id: "advanced",
+      label: t("train_regularly"),
+    },
+  ];
 
   const handleContinue = () => {
-    const height = parseInt(value);
-    if (height < 100 || height > 250) {
-      setError("Please enter a valid height between 100 and 250 cm");
-      return;
+    if (selectedLevel) {
+      setExperienceLevel(selectedLevel);
+      router.push("/onboarding/question-4");
     }
-
-    setHeight(height);
-    router.push("/onboarding/question-4");
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <div className="h-2 bg-gray-100">
-        <div className="h-full w-full bg-primary rounded-r-full" />
+        <div className="h-full w-3/4 bg-primary rounded-r-full" />
       </div>
 
       <div className="flex-1 flex flex-col p-6">
         <div className="flex-1 flex flex-col items-center justify-center max-w-md mx-auto text-center space-y-8">
           <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-            <Ruler className="w-10 h-10 text-primary" />
+            <Dumbbell className="w-10 h-10 text-primary" />
           </div>
 
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold text-gray-900">
-              What's your height?
+              {t("experience_and_fitness_level")}
             </h1>
-            <p className="text-gray-500">
-              This helps us calculate your fitness metrics
-            </p>
+            <p className="text-gray-500">{t("have_you_done_sports_before")}</p>
           </div>
 
-          <div className="w-full space-y-4">
-            <div className="relative">
-              <Input
-                type="number"
-                placeholder="Enter your height"
-                value={value}
-                onChange={(e) => {
-                  setValue(e.target.value);
-                  setError("");
-                }}
-                className="text-center text-lg h-14 pr-12"
-              />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
-                cm
-              </span>
-            </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+          <div className="w-full space-y-3">
+            {experienceLevels.map((level) => (
+              <button
+                key={level.id}
+                className={`w-full p-4 rounded-lg border text-left transition-all ${
+                  selectedLevel === level.id
+                    ? "border-primary bg-primary/5 text-primary"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+                onClick={() => setSelectedLevel(level.id as ExperienceLevel)}
+              >
+                <div className="flex items-center">
+                  <div
+                    className={`w-5 h-5 rounded-full border mr-3 flex items-center justify-center ${
+                      selectedLevel === level.id
+                        ? "border-primary"
+                        : "border-gray-300"
+                    }`}
+                  >
+                    {selectedLevel === level.id && (
+                      <div className="w-3 h-3 rounded-full bg-primary" />
+                    )}
+                  </div>
+                  <span className="font-medium">{level.label}</span>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
 
         <div className="mt-auto">
           <Button
             className="w-full h-14 text-lg"
-            disabled={!value}
+            disabled={!selectedLevel}
             onClick={handleContinue}
           >
-            Continue
+            {t("continue")}
           </Button>
         </div>
       </div>

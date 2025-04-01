@@ -13,7 +13,7 @@ export default function DonePage() {
   const { user, setUser } = useAuth();
   const { submitData } = useOnboarding();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleStart = async () => {
     try {
@@ -22,10 +22,10 @@ export default function DonePage() {
       await AuthService.getMe().then((user) => {
         setUser(user);
       });
-      router.push('/home');
+      router.push("/home");
     } catch (error) {
-      console.error('Failed to save data:', error);
-      setError('Something went wrong. Please try again.');
+      console.error("Failed to save data:", error);
+      setError("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -42,31 +42,27 @@ export default function DonePage() {
           <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
             <CheckCircle2 className="w-10 h-10 text-primary" />
           </div>
-          
+
           <div className="space-y-2">
-            <h1 className="text-2xl font-semibold text-gray-900">
-              All Set!
-            </h1>
+            <h1 className="text-2xl font-semibold text-gray-900">All Set!</h1>
             <p className="text-gray-500">
               Your profile is ready. Let's start your fitness journey!
             </p>
           </div>
 
-          {error && (
-            <p className="text-red-500 text-sm">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
         </div>
 
         <div className="mt-auto">
-          <Button 
+          <Button
             className="w-full h-14 text-lg"
             disabled={isSubmitting}
             onClick={handleStart}
           >
-            {isSubmitting ? 'Saving...' : "Let's Start"}
+            {isSubmitting ? "Saving..." : "Let's Start"}
           </Button>
         </div>
       </div>
     </div>
   );
-} 
+}

@@ -212,6 +212,25 @@ const translations = {
   enter_your_height: "Введите ваш рост",
   enter_valid_height:
     "Пожалуйста, введите действительный рост от 100 до 250 см",
+  experience_and_fitness_level: "Опыт и уровень подготовки",
+  have_you_done_sports_before: "Вы занимались спортом ранее?",
+  never: "Никогда",
+  tried_irregularly: "Пробовал(а), но нерегулярно",
+  train_regularly: "Регулярно тренируюсь",
+  training_frequency_question: "Сколько раз в неделю вы готовы тренироваться?",
+  training_frequency_description: "Это поможет нам подобрать подходящий график тренировок",
+  twice_a_week: "2 раза",
+  three_to_four_times: "3–4 раза",
+  five_or_more: "5 и более",
+  trainer_consultation_question: "Хотели бы вы получить персональный разбор от тренера?",
+  trainer_consultation_description: "Наши тренеры могут помочь вам достичь ваших целей быстрее",
+  yes: "Да",
+  no: "Нет",
+  beginner: "Новичок",
+  intermediate: "Средний",
+  advanced: "Продвинутый",
+  expert: "Эксперт",
+  finish: "Завершить",
 };
 
 export default translations;
