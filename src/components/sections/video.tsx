@@ -433,7 +433,9 @@ export default function Video({
           </div>
 
           {/* Description */}
-          <a href="https://api.smart-fit.uz/admin/">SmartFit backend</a>
+          <a href="https://api.smart-fit.uz/admin/" target="_blank">
+            SmartFit backend
+          </a>
           <p className="text-sm text-gray-600 leading-relaxed">
             {lesson.description || t("default_video_description")}
           </p>
