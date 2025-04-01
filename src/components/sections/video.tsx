@@ -346,11 +346,18 @@ export default function Video({
     try {
       setIsLoading(true);
       setError(null);
-      const response = await axiosInstance.get(`/courses/get-one-time-video-token/${lesson.id}/`);
-      
+      const response = await axiosInstance.get(
+        `/courses/get-one-time-video-token/${lesson.id}/`
+      );
+
       if (response.data.status === "success" && response.data.data.video_url) {
         // Open in external browser
-        window.open(response.data.data.video_url, "_blank");
+        if (window.Telegram?.WebApp?.openLink) {
+          window.Telegram.WebApp.openLink(response.data.data.video_url);
+        } else {
+          // Fallback behavior, maybe open in same window
+          window.open(response.data.data.video_url, "_blank");
+        }
       } else {
         setError(t("video_not_available"));
       }
@@ -374,8 +381,8 @@ export default function Video({
                 <span>{error}</span>
               </div>
             )}
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="flex items-center gap-2 mb-2"
               onClick={handlePlayVideo}
               disabled={isLoading}
@@ -388,7 +395,9 @@ export default function Video({
               <span>{t("play_video")}</span>
               <ExternalLink className="w-4 h-4 ml-1" />
             </Button>
-            <p className="text-white text-sm opacity-70">{t("opens_in_external_browser")}</p>
+            <p className="text-white text-sm opacity-70">
+              {t("opens_in_external_browser")}
+            </p>
           </div>
         </div>
 

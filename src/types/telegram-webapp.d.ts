@@ -1,6 +1,7 @@
 interface TelegramWebApps {
   WebApp: {
     ready: () => void;
+    openLink: (link: any) => void;
     initDataUnsafe: {
       user?: {
         id: number;
@@ -17,4 +18,4 @@ interface TelegramWebApps {
 
 interface Window {
   Telegram: TelegramWebApps;
-} 
+}
