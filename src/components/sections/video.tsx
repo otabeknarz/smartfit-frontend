@@ -352,8 +352,8 @@ export default function Video({
 
       if (response.data.status === "success" && response.data.data.video_url) {
         // Open in external browser
-        if (window.Telegram?.WebApp?.openLink) {
-          window.Telegram.WebApp.openLink(response.data.data.video_url);
+        if (window.Telegram?.WebApp?.openTelegramLink) {
+          window.Telegram.WebApp.openTelegramLink(response.data.data.video_url);
         } else {
           // Fallback behavior, maybe open in same window
           window.open(response.data.data.video_url, "_blank");
