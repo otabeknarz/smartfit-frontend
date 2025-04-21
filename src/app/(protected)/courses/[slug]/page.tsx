@@ -177,7 +177,7 @@ export default function CoursePage() {
                   <h1 className="text-3xl md:text-4xl font-bold mb-4">
                     {course.title}
                   </h1>
-                  <div className="flex items-center gap-4 text-sm">
+                  <div className="flex flex-wrap items-center gap-4 text-sm">
                     <div className="flex items-center gap-1">
                       <User size={16} />
                       <span>
