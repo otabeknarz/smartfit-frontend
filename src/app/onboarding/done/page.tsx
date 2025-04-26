@@ -7,6 +7,7 @@ import { useOnboarding } from "@/contexts/OnboardingContext";
 import { useState } from "react";
 import { AuthService } from "@/lib/apiService";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function DonePage() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function DonePage() {
   const { submitData } = useOnboarding();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const { t } = useLanguage();
 
   const handleStart = async () => {
     try {
@@ -25,7 +27,7 @@ export default function DonePage() {
       router.push("/home");
     } catch (error) {
       console.error("Failed to save data:", error);
-      setError("Something went wrong. Please try again.");
+      setError(t("something_went_wrong"));
     } finally {
       setIsSubmitting(false);
     }
@@ -44,9 +46,9 @@ export default function DonePage() {
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-2xl font-semibold text-gray-900">All Set!</h1>
+            <h1 className="text-2xl font-semibold text-gray-900">{t("all_set")}</h1>
             <p className="text-gray-500">
-              Your profile is ready. Let's start your fitness journey!
+              {t("profile_ready")}
             </p>
           </div>
 
@@ -59,7 +61,7 @@ export default function DonePage() {
             disabled={isSubmitting}
             onClick={handleStart}
           >
-            {isSubmitting ? "Saving..." : "Let's Start"}
+            {isSubmitting ? t("saving") : t("lets_start")}
           </Button>
         </div>
       </div>

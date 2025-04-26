@@ -191,6 +191,11 @@ const translations = {
   yes: "Yes",
   no: "No",
   finish: "Finish",
+  all_set: "All Set!",
+  profile_ready: "Your profile is ready. Let's start your fitness journey!",
+  lets_start: "Let's Start",
+  saving: "Saving...",
+  something_went_wrong: "Something went wrong. Please try again.",
 };
 
 export default translations;

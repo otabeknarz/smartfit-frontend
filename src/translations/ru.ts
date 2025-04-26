@@ -231,6 +231,11 @@ const translations = {
   advanced: "Продвинутый",
   expert: "Эксперт",
   finish: "Завершить",
+  all_set: "Всё готово!",
+  profile_ready: "Ваш профиль готов. Давайте начнем ваше фитнес-путешествие!",
+  lets_start: "Начнем",
+  saving: "Сохранение...",
+  something_went_wrong: "Что-то пошло не так. Пожалуйста, попробуйте снова.",
 };
 
 export default translations;

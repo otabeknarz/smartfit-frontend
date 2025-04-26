@@ -1,0 +1,520 @@
+Skip to content
+[Telegram Mini Apps](https://docs.telegram-mini-apps.com/)
+[Home](https://docs.telegram-mini-apps.com/)
+[Platform](https://docs.telegram-mini-apps.com/platform/about)
+[Packages](https://docs.telegram-mini-apps.com/packages/telegram-apps-create-mini-app)
+English
+[中文](https://docs.telegram-mini-apps.com/zh/packages/telegram-apps-sdk-react/2-x)
+English
+[中文](https://docs.telegram-mini-apps.com/zh/packages/telegram-apps-sdk-react/2-x)
+Appearance
+
+## CLI
+
+[@telegram-apps/create-mini-app](https://docs.telegram-mini-apps.com/packages/telegram-apps-create-mini-app)
+@telegram-apps/create-mini-app
+[@telegram-apps/mate](https://docs.telegram-mini-apps.com/packages/telegram-apps-mate)
+
+### @telegram-apps/mate
+
+[Hosting](https://docs.telegram-mini-apps.com/packages/telegram-apps-mate/hosting)
+Hosting
+
+## TypeScript
+
+[@telegram-apps/signals](https://docs.telegram-mini-apps.com/packages/telegram-apps-signals)
+@telegram-apps/signals
+[@telegram-apps/bridge](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge)
+
+### @telegram-apps/bridge
+
+[@2.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/2-x)
+
+#### @2.x
+[Methods](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/2-x/methods)
+Methods
+[Events](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/2-x/events)
+Events
+[Launch Parameters](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/2-x/launch-parameters)
+Launch Parameters
+[Environment](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/2-x/environment)
+Environment
+[Globals](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/2-x/globals)
+Globals
+[Advanced](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/2-x/advanced)
+Advanced
+[Methods](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/methods)
+Methods
+[Events](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/events)
+Events
+[Environment](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/environment)
+Environment
+[Launch Parameters](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/launch-parameters)
+Launch Parameters
+[Globals](https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/globals)
+Globals
+
+### @telegram-apps/sdk
+
+[@1.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x)
+
+#### @1.x
+[Components](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components)
+
+##### Components
+[BackButton](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/back-button)
+BackButton
+[BiometryManager](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/biometry-manager)
+BiometryManager
+[ClosingBehavior](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/closing-behavior)
+ClosingBehavior
+[CloudStorage](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/cloud-storage)
+CloudStorage
+[HapticFeedback](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/haptic-feedback)
+HapticFeedback
+[InitData](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/init-data)
+InitData
+[Invoice](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/invoice)
+Invoice
+[MainButton](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/main-button)
+MainButton
+[MiniApp](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/mini-app)
+MiniApp
+[Popup](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/popup)
+Popup
+[QRScanner](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/qr-scanner)
+QRScanner
+[SettingsButton](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/settings-button)
+SettingsButton
+[SwipeBehavior](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/swipe-behavior)
+SwipeBehavior
+[ThemeParams](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/theme-params)
+ThemeParams
+[Utils](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/utils)
+Utils
+[Viewport](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/components/viewport)
+Viewport
+[Environment](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/environment)
+Environment
+[Methods and Events](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/methods-and-events)
+Methods and Events
+[Launch Parameters](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/launch-parameters)
+Launch Parameters
+[Theme Parameters](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/theme-parameters)
+Theme Parameters
+[Init Data](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/init-data)
+
+##### Init Data
+[InitData](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/init-data/init-data)
+InitData
+[Chat](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/init-data/chat)
+Chat
+[User](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/init-data/user)
+User
+[Navigation](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/navigation)
+
+##### Navigation
+[BrowserNavigator](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/navigation/browser-navigator)
+BrowserNavigator
+[CSS Variables](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/1-x/css-variables)
+CSS Variables
+[@2.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x)
+
+#### @2.x
+[Initializing](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/initializing)
+Initializing
+[Scopes](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/scopes)
+Scopes
+[Usage Tips](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/usage-tips)
+Usage Tips
+
+##### Components
+[Back Button](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/back-button)
+Back Button
+[Biometry](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/biometry)
+Biometry
+[Closing Behavior](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/closing-behavior)
+Closing Behavior
+[Cloud Storage](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/cloud-storage)
+Cloud Storage
+[Haptic Feedback](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/haptic-feedback)
+Haptic Feedback
+[Init Data](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/init-data)
+Init Data
+
+### @telegram-apps/sdk
+
+[Invoice](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/invoice)
+Invoice
+[Main Button](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/main-button)
+Main Button
+[Mini App](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/mini-app)
+Mini App
+[Popup](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/popup)
+Popup
+[QR Scanner](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/qr-scanner)
+QR Scanner
+[Secondary Button](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/secondary-button)
+Secondary Button
+[Settings Button](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/settings-button)
+Settings Button
+[Swipe Behavior](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/swipe-behavior)
+Swipe Behavior
+[Theme Params](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/theme-params)
+Theme Params
+[Viewport](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/components/viewport)
+Viewport
+
+##### Utilities
+[Emoji Status](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/utils/emoji-status)
+Emoji Status
+[Home Screen](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/utils/home-screen)
+Home Screen
+[Links](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/utils/links)
+Links
+[Privacy](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/utils/privacy)
+Privacy
+[Uncategorized](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x/utils/uncategorized)
+Uncategorized
+[@3.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x)
+
+#### @3.x
+[Initializing](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/initializing)
+Initializing
+[Scopes](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/scopes)
+Scopes
+[Usage Tips](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/usage-tips)
+Usage Tips
+
+##### Components
+[Back Button](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/back-button)
+Back Button
+[Biometry](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/biometry)
+Biometry
+[Closing Behavior](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/closing-behavior)
+Closing Behavior
+[Cloud Storage](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/cloud-storage)
+Cloud Storage
+[Haptic Feedback](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/haptic-feedback)
+Haptic Feedback
+[Init Data](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/init-data)
+Init Data
+[Invoice](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/invoice)
+Invoice
+[Location Manager](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/location-manager)
+Location Manager
+[Main Button](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/main-button)
+Main Button
+[Mini App](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/mini-app)
+Mini App
+[Popup](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/popup)
+Popup
+[QR Scanner](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/qr-scanner)
+QR Scanner
+[Secondary Button](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/secondary-button)
+Secondary Button
+[Settings Button](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/settings-button)
+Settings Button
+[Swipe Behavior](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/swipe-behavior)
+Swipe Behavior
+[Theme Params](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/theme-params)
+Theme Params
+[Viewport](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/components/viewport)
+Viewport
+
+##### Utilities
+[Emoji Status](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/utils/emoji-status)
+Emoji Status
+[Home Screen](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/utils/home-screen)
+Home Screen
+[Links](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/utils/links)
+Links
+
+### @telegram-apps/sdk
+[Privacy](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/utils/privacy)
+Privacy
+[Uncategorized](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/3-x/utils/uncategorized)
+Uncategorized
+
+### @telegram-apps/sdk-react
+[@1.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react/1-x)
+@1.x
+[@2.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react/2-x)
+@2.x
+[@3.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react/3-x)
+@3.x
+
+### @telegram-apps/sdk-solid
+[@1.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-solid/1-x)
+@1.x
+[@2.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-solid/2-x)
+@2.x
+[@3.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-solid/3-x)
+@3.x
+[@telegram-apps/sdk-vue](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-vue)
+
+### @telegram-apps/sdk-vue
+[@2.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-vue/2-x)
+@2.x
+[@telegram-apps/sdk-svelte](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-svelte)
+
+### @telegram-apps/sdk-svelte
+[@2.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-svelte/2-x)
+@2.x
+[@telegram-apps/solid-router-integration](https://docs.telegram-mini-apps.com/packages/telegram-apps-solid-router-integration)
+@telegram-apps/solid-router-integration
+[@telegram-apps/react-router-integration](https://docs.telegram-mini-apps.com/packages/telegram-apps-react-router-integration)
+@telegram-apps/react-router-integration
+
+## Node
+
+[@telegram-apps/init-data-node](https://docs.telegram-mini-apps.com/packages/telegram-apps-init-data-node)
+
+### @telegram-apps/init-data-node
+
+[@2.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-init-data-node/2-x)
+@2.x
+
+## GoLang
+
+[init-data-golang](https://docs.telegram-mini-apps.com/packages/init-data-golang)
+init-data-golang
+
+# @telegram-apps/sdk-react@2 ​
+
+​
+Newer version available
+@telegram-apps/sdk-react@3.x is [out](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react/3-x)!
+
+```
+@telegram-apps/sdk-react@3.x
+```
+
+React.js package providing utilities that developers may find useful when developing a mini application.
+TIP
+Since this package offers utility functions that extend the functionality of [@telegram-apps/sdk](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x), it is recommended to review the SDK package documentation first.
+
+## Installation ​
+​
+Before proceeding, it is assumed that you have already installed the react package, as it is a peer dependency of this package.
+
+```
+react
+```
+
+
+```
+pnpm i @telegram-apps/sdk-react
+```
+
+
+```
+pnpm i @telegram-apps/sdk-react
+```
+
+
+```
+npm i @telegram-apps/sdk-react
+```
+
+
+```
+npm i @telegram-apps/sdk-react
+```
+
+
+```
+yarn add @telegram-apps/sdk-react
+```
+
+
+```
+yarn add @telegram-apps/sdk-react
+```
+
+INFO
+This package fully re-exports the [@telegram-apps/sdk](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x) package, so you don't need to install it separately.
+
+## Usage ​
+​
+Here is a simple usage example of the package:
+
+```
+import ReactDOM from 'react-dom/client';
+import { init, backButton } from '@telegram-apps/sdk-react';
+
+import { BackButton } from './BackButton.js';
+
+// Initialize the package.
+init();
+
+// Mount the Back Button, so we will work with 
+// the actual component properties.
+backButton.mount();
+
+ReactDOM
+  .createRoot(document.getElementById('root')!)
+  .render(<BackButton/>);
+```
+
+
+```
+import ReactDOM from 'react-dom/client';
+import { init, backButton } from '@telegram-apps/sdk-react';
+
+import { BackButton } from './BackButton.js';
+
+// Initialize the package.
+init();
+
+// Mount the Back Button, so we will work with 
+// the actual component properties.
+backButton.mount();
+
+ReactDOM
+  .createRoot(document.getElementById('root')!)
+  .render(<BackButton/>);
+```
+
+
+```
+import { useEffect } from 'react';
+import { backButton, useSignal } from '@telegram-apps/sdk-react';
+
+/**
+ * Component which controls the Back Button visibility.
+ */
+export function BackButton() {
+  const isVisible = useSignal(backButton.isVisible);
+
+  useEffect(() => {
+    console.log('The button is', isVisible ? 'visible' : 'invisible');
+  }, [isVisible]);
+
+  useEffect(() => {
+    backButton.show();
+    return () => {
+      backButton.hide();
+    };
+  }, []);
+
+  return null;
+}
+```
+
+
+```
+import { useEffect } from 'react';
+import { backButton, useSignal } from '@telegram-apps/sdk-react';
+
+/**
+ * Component which controls the Back Button visibility.
+ */
+export function BackButton() {
+  const isVisible = useSignal(backButton.isVisible);
+
+  useEffect(() => {
+    console.log('The button is', isVisible ? 'visible' : 'invisible');
+  }, [isVisible]);
+
+  useEffect(() => {
+    backButton.show();
+    return () => {
+      backButton.hide();
+    };
+  }, []);
+
+  return null;
+}
+```
+
+## Hooks ​
+​
+
+### useSignal ​
+```
+useSignal
+```
+
+​
+A helper that allows a developer to use our [signals](https://docs.telegram-mini-apps.com/packages/telegram-apps-signals) in the application.
+It returns the underlying value and updates it whenever the signal value changes.
+
+```
+import { useEffect } from 'react';
+import { backButton, useSignal } from '@telegram-apps/sdk-react';
+
+function Component() {
+  const isVisible = useSignal(backButton.isVisible);
+
+  useEffect(() => {
+    console.log('The button is', isVisible ? 'visible' : 'invisible');
+  }, [isVisible]);
+
+  useEffect(() => {
+    backButton.show();
+    return () => {
+      backButton.hide();
+    };
+  }, []);
+
+  return null;
+}
+```
+
+
+```
+import { useEffect } from 'react';
+import { backButton, useSignal } from '@telegram-apps/sdk-react';
+
+function Component() {
+  const isVisible = useSignal(backButton.isVisible);
+
+  useEffect(() => {
+    console.log('The button is', isVisible ? 'visible' : 'invisible');
+  }, [isVisible]);
+
+  useEffect(() => {
+    backButton.show();
+    return () => {
+      backButton.hide();
+    };
+  }, []);
+
+  return null;
+}
+```
+
+### useLaunchParams ​
+```
+useLaunchParams
+```
+
+​
+A function that returns the mini application's launch parameters.
+
+```
+import { useLaunchParams } from '@telegram-apps/sdk-react';
+
+function Component() {
+  const lp = useLaunchParams();
+  return <div>Start parameter: {lp.startParam}</div>;
+}
+```
+
+
+```
+import { useLaunchParams } from '@telegram-apps/sdk-react';
+
+function Component() {
+  const lp = useLaunchParams();
+  return <div>Start parameter: {lp.startParam}</div>;
+}
+```
+
+[Edit this page on GitHub](https://github.com/telegram-mini-apps/telegram-apps/edit/master/apps/docs/packages/telegram-apps-sdk-react/2-x.md)
+Last updated:
+[Previous page@1.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react/1-x)
+[Next page@3.x](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react/3-x)
+Released under the MIT License.
+Copyright © 2022-present Vladislav Kibenko and Contributors

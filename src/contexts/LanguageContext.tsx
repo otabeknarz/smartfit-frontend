@@ -10,24 +10,27 @@ interface LanguageContextType {
   t: (key: string, params?: Record<string, any>) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
 
 // Default translations to use before the dynamic imports are complete
 const defaultTranslations = {
   ru: {},
-  en: {}
+  en: {},
 };
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [language, setLanguage] = useState<Language>("ru");
-  const [translations, setTranslations] = useState<Record<string, Record<string, string>>>(defaultTranslations);
+  const [translations, setTranslations] =
+    useState<Record<string, Record<string, string>>>(defaultTranslations);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Load saved language preference from localStorage if available
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedLanguage = localStorage.getItem("smartfit-language");
       if (savedLanguage && (savedLanguage === "ru" || savedLanguage === "en")) {
         setLanguage(savedLanguage as Language);
@@ -38,11 +41,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
     const loadTranslations = async () => {
       try {
         setIsLoading(true);
-        
+
         // Dynamic imports for translations
-        const ruModule = await import('../translations/ru');
-        const enModule = await import('../translations/en');
-        
+        const ruModule = await import("../translations/ru");
+        const enModule = await import("../translations/en");
+
         setTranslations({
           ru: ruModule.default,
           en: enModule.default,
@@ -59,7 +62,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Save language preference to localStorage when it changes
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("smartfit-language", language);
     }
   }, [language]);
@@ -69,16 +72,19 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
     if (isLoading || !translations[language]) {
       return key;
     }
-    
+
     let text = translations[language][key] || translations["ru"][key] || key;
-    
+
     // If params are provided, replace placeholders in the text
     if (params) {
       Object.entries(params).forEach(([paramKey, paramValue]) => {
-        text = text.replace(new RegExp(`{${paramKey}}`, 'g'), String(paramValue));
+        text = text.replace(
+          new RegExp(`{${paramKey}}`, "g"),
+          String(paramValue)
+        );
       });
     }
-    
+
     return text;
   };
 
