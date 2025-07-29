@@ -5,448 +5,438 @@ import { useEffect, useState } from "react";
 import { axiosInstance } from "@/lib/apiService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Calendar,
-  Clock,
-  Coins,
-  Lock,
-  Play,
-  Unlock,
-  User,
-  ExternalLink,
+	Calendar,
+	Clock,
+	Coins,
+	Lock,
+	Play,
+	Unlock,
+	User,
+	ExternalLink,
 } from "lucide-react";
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast } from "@/components/ui/use-toast";
 
 // Interfaces based on the provided data
 interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
+	id: number;
+	name: string;
+	slug: string;
+	description: string;
 }
 
 interface Trainer {
-  id: string;
-  name: string;
-  gender: "MALE" | "FEMALE";
-  picture: string;
+	id: string;
+	name: string;
+	gender: "MALE" | "FEMALE";
+	picture: string;
 }
 
 interface Lesson {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  video_url: string;
-  order: number;
-  duration: string;
-  is_free_preview: boolean;
-  created_at: string;
-  updated_at: string;
-  part: string;
+	id: string;
+	title: string;
+	slug: string;
+	description: string;
+	video_url: string;
+	order: number;
+	duration: string;
+	is_free_preview: boolean;
+	created_at: string;
+	updated_at: string;
+	part: string;
 }
 
 interface Part {
-  id: string;
-  lessons: Lesson[];
-  title: string;
-  slug: string;
-  description: string;
-  order: number;
-  created_at: string;
-  updated_at: string;
-  course: string;
+	id: string;
+	lessons: Lesson[];
+	title: string;
+	slug: string;
+	description: string;
+	order: number;
+	created_at: string;
+	updated_at: string;
+	course: string;
 }
 
 interface Course {
-  id: string;
-  category: Category;
-  trainers: Trainer[];
-  parts: Part[];
-  title: string;
-  slug: string;
-  description: string;
-  price: string;
-  is_published: boolean;
-  is_enrolled: boolean;
-  created_at: string;
-  updated_at: string;
-  thumbnail: string;
+	id: string;
+	category: Category;
+	trainers: Trainer[];
+	parts: Part[];
+	title: string;
+	slug: string;
+	description: string;
+	price: string;
+	is_published: boolean;
+	is_enrolled: boolean;
+	created_at: string;
+	updated_at: string;
+	thumbnail: string;
 }
 
 function notFound() {
-  const { t } = useLanguage();
+	const { t } = useLanguage();
 
-  return (
-    <>
-      <Navbar title={t("no_title")} />
-      <main className="bg-gray-50 min-h-[calc(100vh-80px)]">
-        <div className="px-4 py-6 sm:py-8 max-w-screen-sm mx-auto">
-          <div className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-              {t("no_title")}
-            </h1>
-            <p className="text-gray-500 text-sm sm:text-base">
-              {t("course_not_found")}
-            </p>
-          </div>
-        </div>
-      </main>
-    </>
-  );
+	return (
+		<>
+			<Navbar title={t("no_title")} />
+			<main className="bg-gray-50 min-h-[calc(100vh-80px)]">
+				<div className="px-4 py-6 sm:py-8 max-w-screen-sm mx-auto">
+					<div className="mb-6 sm:mb-8">
+						<h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+							{t("no_title")}
+						</h1>
+						<p className="text-gray-500 text-sm sm:text-base">
+							{t("course_not_found")}
+						</p>
+					</div>
+				</div>
+			</main>
+		</>
+	);
 }
 
 export default function CoursePage() {
-  const [course, setCourse] = useState<Course | null>(null);
-  const [activeTab, setActiveTab] = useState("overview");
-  const [isEnrolling, setIsEnrolling] = useState(false);
-  const [contactModalOpen, setContactModalOpen] = useState(false);
-  const router = useRouter();
-  const { slug } = useParams<{ slug: string }>();
-  const { t } = useLanguage();
+	const [course, setCourse] = useState<Course | null>(null);
+	const [activeTab, setActiveTab] = useState("overview");
+	const [isEnrolling, setIsEnrolling] = useState(false);
+	const [contactModalOpen, setContactModalOpen] = useState(false);
+	const router = useRouter();
+	const { slug } = useParams<{ slug: string }>();
+	const { t } = useLanguage();
 
-  useEffect(() => {
-    async function getCourse() {
-      try {
-        const response = await axiosInstance.get(
-          `/courses/get-course/${slug}/`
-        );
-        const data = await response.data;
-        setCourse(data);
-      } catch (error) {
-        console.error("Error fetching course:", error);
-      }
-    }
+	useEffect(() => {
+		async function getCourse() {
+			try {
+				const response = await axiosInstance.get(
+					`/courses/get-course/${slug}/`
+				);
+				const data = await response.data;
+				setCourse(data);
+			} catch (error) {
+				console.error("Error fetching course:", error);
+			}
+		}
 
-    getCourse();
-  }, [slug]);
+		getCourse();
+	}, [slug]);
 
-  console.log(course);
+	console.log(course);
 
-  // Handle contact with sales manager
-  const handleContactSales = () => {
-    window.open("https://t.me/otabek_narz", "_blank");
-  };
+	// Handle contact with sales manager
+	const handleEnrollCourse = async () => {
+		try {
+			await axiosInstance.post(`/courses/enroll/${slug}/`);
+			toast({
+				title: t("enrollment_successful"),
+				description: t("successfully_enrolled"),
+			});
+			setIsEnrolling(false);
+			setContactModalOpen(false);
+		} catch (error) {
+			console.error("Error enrolling in course:", error);
+			toast({
+				title: t("enrollment_failed"),
+				description: t("failed_to_enroll"),
+				variant: "destructive",
+			});
+		} finally {
+			setIsEnrolling(false);
+		}
+	};
 
-  if (!course) {
-    return notFound();
-  }
+	if (!course) {
+		return notFound();
+	}
 
-  // Content that's available only for enrolled users or free preview
-  const canAccessLesson = (lesson: Lesson) => {
-    return course.is_enrolled || lesson.is_free_preview;
-  };
+	// Content that's available only for enrolled users or free preview
+	const canAccessLesson = (lesson: Lesson) => {
+		return course.is_enrolled || lesson.is_free_preview;
+	};
 
-  // Navigate to lesson view
-  const navigateToLesson = (lessonSlug: string) => {
-    router.push(`/courses/${slug}/lessons/${lessonSlug}`);
-  };
+	// Navigate to lesson view
+	const navigateToLesson = (lessonSlug: string) => {
+		router.push(`/courses/${slug}/lessons/${lessonSlug}`);
+	};
 
-  return (
-    <>
-      <Navbar title={course?.title || t("no_title")} />
-      <main className="bg-gray-50 min-h-[calc(100vh-80px)]">
-        <div className="container mx-auto px-4 py-8">
-          {/* Hero Section */}
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
-            <div className="relative h-64 bg-gradient-to-r from-blue-600 to-indigo-700">
-              <div className="absolute inset-0 bg-black/20" />
-              <div className="absolute inset-0 flex items-center">
-                <div className="text-white px-8">
-                  <Badge className="mb-4 bg-indigo-600 hover:bg-indigo-700">
-                    {course.category.name}
-                  </Badge>
-                  <h1 className="text-3xl md:text-4xl font-bold mb-4">
-                    {course.title}
-                  </h1>
-                  <div className="flex flex-wrap items-center gap-4 text-sm">
-                    <div className="flex items-center gap-1">
-                      <User size={16} />
-                      <span>
-                        {course.trainers
-                          .map((trainer) => trainer.name)
-                          .join(", ")}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar size={16} />
-                      <span>
-                        {new Date(course.created_at).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Coins size={16} />
-                      <span>
-                        {new Intl.NumberFormat("uz-UZ").format(
-                          parseFloat(course.price)
-                        )}{" "}
-                        UZS
-                      </span>
-                    </div>
-                    {course.is_enrolled && (
-                      <Badge
-                        variant="outline"
-                        className="bg-green-50 text-green-700 border-green-200"
-                      >
-                        <Unlock size={14} className="mr-1" /> {t("enrolled")}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+	return (
+		<>
+			<Navbar title={course?.title || t("no_title")} />
+			<main className="bg-gray-50 min-h-[calc(100vh-80px)]">
+				<div className="container mx-auto px-4 py-8">
+					{/* Hero Section */}
+					<div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+						<div className="relative h-64 bg-gradient-to-r from-blue-600 to-indigo-700">
+							<div className="absolute inset-0 bg-black/20" />
+							<div className="absolute inset-0 flex items-center">
+								<div className="text-white px-8">
+									<Badge className="mb-4 bg-indigo-600 hover:bg-indigo-700">
+										{course.category.name}
+									</Badge>
+									<h1 className="text-3xl md:text-4xl font-bold mb-4">
+										{course.title}
+									</h1>
+									<div className="flex flex-wrap items-center gap-4 text-sm">
+										<div className="flex items-center gap-1">
+											<User size={16} />
+											<span>
+												{course.trainers
+													.map((trainer) => trainer.name)
+													.join(", ")}
+											</span>
+										</div>
+										<div className="flex items-center gap-1">
+											<Calendar size={16} />
+											<span>
+												{new Date(course.created_at).toLocaleDateString()}
+											</span>
+										</div>
+										<div className="flex items-center gap-1">
+											<Coins size={16} />
+											<span>
+												{new Intl.NumberFormat("uz-UZ").format(
+													parseFloat(course.price)
+												)}{" "}
+												UZS
+											</span>
+										</div>
+										{course.is_enrolled && (
+											<Badge
+												variant="outline"
+												className="bg-green-50 text-green-700 border-green-200"
+											>
+												<Unlock size={14} className="mr-1" /> {t("enrolled")}
+											</Badge>
+										)}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-2">
-              <Tabs defaultValue="curriculum" className="w-full">
-                <TabsList className="mb-6 w-full justify-start">
-                  <TabsTrigger value="curriculum">
-                    {t("curriculum")}
-                  </TabsTrigger>
-                  <TabsTrigger value="overview">{t("overview")}</TabsTrigger>
-                  <TabsTrigger value="trainers">{t("trainers")}</TabsTrigger>
-                </TabsList>
+					<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+						{/* Main Content */}
+						<div className="lg:col-span-2">
+							<Tabs defaultValue="curriculum" className="w-full">
+								<TabsList className="mb-6 w-full justify-start">
+									<TabsTrigger value="curriculum">
+										{t("curriculum")}
+									</TabsTrigger>
+									<TabsTrigger value="overview">{t("overview")}</TabsTrigger>
+									<TabsTrigger value="trainers">{t("trainers")}</TabsTrigger>
+								</TabsList>
 
-                <TabsContent value="curriculum" className="space-y-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>{t("course_curriculum")}</CardTitle>
-                      <CardDescription>
-                        {course.parts?.length} {t("parts")} •{" "}
-                        {course.parts?.reduce(
-                          (acc, part) => acc + part.lessons.length,
-                          0
-                        )}{" "}
-                        {t("lessons")}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      {course?.parts?.length > 0 &&
-                        course?.parts
-                          .sort((a, b) => a.order - b.order)
-                          .map((part) => (
-                            <div
-                              key={part.id}
-                              className="border rounded-lg overflow-hidden"
-                            >
-                              <div className="bg-gray-50 p-4 font-medium border-b">
-                                {part.title}
-                              </div>
-                              <div className="divide-y">
-                                {part.lessons
-                                  .sort((a, b) => a.order - b.order)
-                                  .map((lesson) => (
-                                    <div
-                                      key={lesson.id}
-                                      className={`p-4 flex items-center justify-between ${
-                                        canAccessLesson(lesson)
-                                          ? "cursor-pointer hover:bg-gray-50"
-                                          : "opacity-70"
-                                      }`}
-                                      onClick={() =>
-                                        canAccessLesson(lesson) &&
-                                        navigateToLesson(lesson.slug)
-                                      }
-                                    >
-                                      <div className="flex items-center gap-3">
-                                        {canAccessLesson(lesson) ? (
-                                          <Play
-                                            size={18}
-                                            className="text-blue-600"
-                                          />
-                                        ) : (
-                                          <Lock
-                                            size={18}
-                                            className="text-gray-400"
-                                          />
-                                        )}
-                                        <div>
-                                          <h4 className="font-medium">
-                                            {lesson.title}
-                                          </h4>
-                                          {lesson.is_free_preview && (
-                                            <Badge
-                                              variant="outline"
-                                              className="text-xs mt-1"
-                                            >
-                                              {t("free_preview")}
-                                            </Badge>
-                                          )}
-                                        </div>
-                                      </div>
-                                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                                        <Clock size={14} />
-                                        <span>{lesson.duration.slice(3)}</span>
-                                      </div>
-                                    </div>
-                                  ))}
-                              </div>
-                            </div>
-                          ))}
-                    </CardContent>
-                  </Card>
-                </TabsContent>
+								<TabsContent value="curriculum" className="space-y-6">
+									<Card>
+										<CardHeader>
+											<CardTitle>{t("course_curriculum")}</CardTitle>
+											<CardDescription>
+												{course.parts?.length} {t("parts")} •{" "}
+												{course.parts?.reduce(
+													(acc, part) => acc + part.lessons.length,
+													0
+												)}{" "}
+												{t("lessons")}
+											</CardDescription>
+										</CardHeader>
+										<CardContent className="space-y-6">
+											{course?.parts?.length > 0 &&
+												course?.parts
+													.sort((a, b) => a.order - b.order)
+													.map((part) => (
+														<div
+															key={part.id}
+															className="border rounded-lg overflow-hidden"
+														>
+															<div className="bg-gray-50 p-4 font-medium border-b">
+																{part.title}
+															</div>
+															<div className="divide-y">
+																{part.lessons
+																	.sort((a, b) => a.order - b.order)
+																	.map((lesson) => (
+																		<div
+																			key={lesson.id}
+																			className={`p-4 flex items-center justify-between ${
+																				canAccessLesson(lesson)
+																					? "cursor-pointer hover:bg-gray-50"
+																					: "opacity-70"
+																			}`}
+																			onClick={() =>
+																				canAccessLesson(lesson) &&
+																				navigateToLesson(lesson.slug)
+																			}
+																		>
+																			<div className="flex items-center gap-3">
+																				{canAccessLesson(lesson) ? (
+																					<Play
+																						size={18}
+																						className="text-blue-600"
+																					/>
+																				) : (
+																					<Lock
+																						size={18}
+																						className="text-gray-400"
+																					/>
+																				)}
+																				<div>
+																					<h4 className="font-medium">
+																						{lesson.title}
+																					</h4>
+																					{lesson.is_free_preview && (
+																						<Badge
+																							variant="outline"
+																							className="text-xs mt-1"
+																						>
+																							{t("free_preview")}
+																						</Badge>
+																					)}
+																				</div>
+																			</div>
+																			<div className="flex items-center gap-2 text-sm text-gray-500">
+																				<Clock size={14} />
+																				<span>{lesson.duration.slice(3)}</span>
+																			</div>
+																		</div>
+																	))}
+															</div>
+														</div>
+													))}
+										</CardContent>
+									</Card>
+								</TabsContent>
 
-                <TabsContent value="overview" className="space-y-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>{t("about_this_course")}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-700 leading-relaxed">
-                        {course.description}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
+								<TabsContent value="overview" className="space-y-6">
+									<Card>
+										<CardHeader>
+											<CardTitle>{t("about_this_course")}</CardTitle>
+										</CardHeader>
+										<CardContent>
+											<p className="text-gray-700 leading-relaxed">
+												{course.description}
+											</p>
+										</CardContent>
+									</Card>
+								</TabsContent>
 
-                <TabsContent value="trainers" className="space-y-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>{t("course_trainers")}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {course.trainers.map((trainer) => (
-                        <div
-                          key={trainer.id}
-                          className="flex items-start gap-4 p-4 rounded-lg border mb-4"
-                        >
-                          <div className="h-16 w-16 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center text-gray-500">
-                            {trainer.picture ? (
-                              <img
-                                src={`https://api.smart-fit.uz${trainer.picture}`}
-                                alt={trainer.name}
-                                className="h-full w-full object-cover"
-                              />
-                            ) : (
-                              <User size={32} />
-                            )}
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-lg">
-                              {trainer.name}
-                            </h3>
-                            <p className="text-gray-600 mt-1">
-                              {t("fitness_trainer")}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </Tabs>
-            </div>
+								<TabsContent value="trainers" className="space-y-6">
+									<Card>
+										<CardHeader>
+											<CardTitle>{t("course_trainers")}</CardTitle>
+										</CardHeader>
+										<CardContent>
+											{course.trainers.map((trainer) => (
+												<div
+													key={trainer.id}
+													className="flex items-start gap-4 p-4 rounded-lg border mb-4"
+												>
+													<div className="h-16 w-16 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center text-gray-500">
+														{trainer.picture ? (
+															<img
+																src={`https://api.smart-fit.uz${trainer.picture}`}
+																alt={trainer.name}
+																className="h-full w-full object-cover"
+															/>
+														) : (
+															<User size={32} />
+														)}
+													</div>
+													<div>
+														<h3 className="font-semibold text-lg">
+															{trainer.name}
+														</h3>
+														<p className="text-gray-600 mt-1">
+															{t("fitness_trainer")}
+														</p>
+													</div>
+												</div>
+											))}
+										</CardContent>
+									</Card>
+								</TabsContent>
+							</Tabs>
+						</div>
 
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
-              <Card className="sticky top-8">
-                <CardHeader>
-                  <CardTitle>
-                    {course.is_enrolled
-                      ? t("youre_enrolled")
-                      : t("enroll_in_this_course")}
-                  </CardTitle>
-                  <CardDescription>
-                    {course.is_enrolled
-                      ? t("full_access_to_lessons")
-                      : t("get_access_to_lessons")}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {!course.is_enrolled && (
-                    <div className="text-3xl font-bold flex items-center gap-2">
-                      <Coins />
-                      <span>
-                        {new Intl.NumberFormat("uz-UZ").format(
-                          parseFloat(course.price)
-                        )}{" "}
-                        UZS
-                      </span>
-                    </div>
-                  )}
+						{/* Sidebar */}
+						<div className="lg:col-span-1">
+							<Card className="sticky top-8">
+								<CardHeader>
+									<CardTitle>
+										{course.is_enrolled
+											? t("youre_enrolled")
+											: t("enroll_in_this_course")}
+									</CardTitle>
+									<CardDescription>
+										{course.is_enrolled
+											? t("full_access_to_lessons")
+											: t("get_access_to_lessons")}
+									</CardDescription>
+								</CardHeader>
+								<CardContent className="space-y-6">
+									{!course.is_enrolled && (
+										<div className="text-3xl font-bold flex items-center gap-2">
+											<Coins />
+											<span>
+												{new Intl.NumberFormat("uz-UZ").format(
+													parseFloat(course.price)
+												)}{" "}
+												UZS
+											</span>
+										</div>
+									)}
 
-                  {course.is_enrolled ? (
-                    <Button className="w-full" variant="outline">
-                      {t("continue_learning")}
-                    </Button>
-                  ) : (
-                    <Dialog
-                      open={contactModalOpen}
-                      onOpenChange={setContactModalOpen}
-                    >
-                      <DialogTrigger asChild>
-                        <Button className="w-full">{t("enroll_now")}</Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-md">
-                        <DialogHeader>
-                          <DialogTitle>{t("contact_sales")}</DialogTitle>
-                          <DialogDescription>
-                            {t("contact_sales_message")}
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="flex items-center justify-center mt-4 mb-2">
-                          <div className="flex flex-col items-center">
-                            <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden">
-                              <User size={32} />
-                            </div>
-                            <p className="mt-1 font-medium">Telegram:</p>
-                            <p className="font-semibold text-xl mt-2">
-                              @otabek_narz
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex justify-center mt-4">
-                          <Button
-                            onClick={handleContactSales}
-                            className="gap-2"
-                          >
-                            {t("contact")}
-                            <ExternalLink className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  )}
+									{course.is_enrolled ? (
+										<Button className="w-full" variant="outline">
+											{t("continue_learning")}
+										</Button>
+									) : (
+										<Dialog
+											open={contactModalOpen}
+											onOpenChange={setContactModalOpen}
+										>
+											<Button onClick={handleEnrollCourse} className="w-full">
+												{t("enroll_now")}
+											</Button>
+										</Dialog>
+									)}
 
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Clock size={16} className="text-gray-500" />
-                      <span>
-                        {course.parts?.reduce(
-                          (acc, part) => acc + part.lessons.length,
-                          0
-                        )}{" "}
-                        {t("lessons")}
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </main>
-    </>
-  );
+									<div className="space-y-3 text-sm">
+										<div className="flex items-center gap-2">
+											<Clock size={16} className="text-gray-500" />
+											<span>
+												{course.parts?.reduce(
+													(acc, part) => acc + part.lessons.length,
+													0
+												)}{" "}
+												{t("lessons")}
+											</span>
+										</div>
+									</div>
+								</CardContent>
+							</Card>
+						</div>
+					</div>
+				</div>
+			</main>
+		</>
+	);
 }
