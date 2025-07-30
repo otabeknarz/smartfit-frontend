@@ -144,14 +144,18 @@ export default function CoursePage() {
 
 	// Handle contact with sales manager
 	const handleEnrollCourse = async () => {
+		console.log(course?.id);
+
 		try {
-			await axiosInstance.post(`/courses/enroll/${slug}/`);
-			toast({
-				title: t("enrollment_successful"),
-				description: t("successfully_enrolled"),
+			const response = await axiosInstance.post(`/payments/payme/`, {
+				method: "GetLinkForFrontend",
+				params: {
+					course_id: course?.id,
+				},
 			});
 			setIsEnrolling(false);
 			setContactModalOpen(false);
+			router.push(response.data.url);
 		} catch (error) {
 			console.error("Error enrolling in course:", error);
 			toast({
