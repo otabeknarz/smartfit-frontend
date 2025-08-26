@@ -13,27 +13,11 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	Calendar,
-	Clock,
-	Coins,
-	Lock,
-	Play,
-	Unlock,
-	User,
-	ExternalLink,
-} from "lucide-react";
+import { Calendar, Clock, Coins, Lock, Play, Unlock, User } from "lucide-react";
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
 
 // Interfaces based on the provided data
@@ -140,22 +124,15 @@ export default function CoursePage() {
 		getCourse();
 	}, [slug]);
 
-	console.log(course);
-
 	// Handle contact with sales manager
 	const handleEnrollCourse = async () => {
-		console.log(course?.id);
-
 		try {
-			const response = await axiosInstance.post(`/payments/payme/`, {
-				method: "GetLinkForFrontend",
-				params: {
-					course_id: course?.id,
-				},
+			const response = await axiosInstance.post(`/payments/payments/`, {
+				course_id: course?.id,
 			});
 			setIsEnrolling(false);
 			setContactModalOpen(false);
-			router.push(response.data.url);
+			router.push(response.data.checkout_session_id);
 		} catch (error) {
 			console.error("Error enrolling in course:", error);
 			toast({
@@ -382,7 +359,7 @@ export default function CoursePage() {
 
 						{/* Sidebar */}
 						<div className="lg:col-span-1">
-							<Card className="sticky top-8">
+							<Card className="sticky top-20">
 								<CardHeader>
 									<CardTitle>
 										{course.is_enrolled
