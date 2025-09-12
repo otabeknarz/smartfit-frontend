@@ -1,7 +1,7 @@
 import axios from "axios";
 import { TokenService } from "./tokenService";
 
-const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = "http://api.smart-fit.uz/api";
 
 export const axiosInstance = axios.create({
 	baseURL: API_URL,
