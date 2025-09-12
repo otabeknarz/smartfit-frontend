@@ -17,8 +17,6 @@ import { Calendar, Clock, Coins, Lock, Play, Unlock, User } from "lucide-react";
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Dialog } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
 
 // Interfaces based on the provided data
 interface Category {
@@ -32,7 +30,6 @@ interface Trainer {
 	id: string;
 	name: string;
 	gender: "MALE" | "FEMALE";
-	picture: string;
 }
 
 interface Lesson {
@@ -74,7 +71,6 @@ interface Course {
 	is_enrolled: boolean;
 	created_at: string;
 	updated_at: string;
-	thumbnail: string;
 }
 
 function notFound() {
@@ -103,7 +99,6 @@ export default function CoursePage() {
 	const [course, setCourse] = useState<Course | null>(null);
 	const [activeTab, setActiveTab] = useState("overview");
 	const [isEnrolling, setIsEnrolling] = useState(false);
-	const [contactModalOpen, setContactModalOpen] = useState(false);
 	const router = useRouter();
 	const { slug } = useParams<{ slug: string }>();
 	const { t } = useLanguage();
@@ -124,25 +119,11 @@ export default function CoursePage() {
 		getCourse();
 	}, [slug]);
 
-	// Handle contact with sales manager
-	const handleEnrollCourse = async () => {
-		try {
-			const response = await axiosInstance.post(`/payments/payments/`, {
-				course_id: course?.id,
-			});
-			setIsEnrolling(false);
-			setContactModalOpen(false);
-			router.push(response.data.checkout_session_id);
-		} catch (error) {
-			console.error("Error enrolling in course:", error);
-			toast({
-				title: t("enrollment_failed"),
-				description: t("failed_to_enroll"),
-				variant: "destructive",
-			});
-		} finally {
-			setIsEnrolling(false);
-		}
+	console.log(course);
+
+	// TODO: have to make payments here
+	const handleEnrollment = async () => {
+		await router.push("https://t.me/gureevaolesya");
 	};
 
 	if (!course) {
@@ -176,7 +157,7 @@ export default function CoursePage() {
 									<h1 className="text-3xl md:text-4xl font-bold mb-4">
 										{course.title}
 									</h1>
-									<div className="flex flex-wrap items-center gap-4 text-sm">
+									<div className="flex items-center gap-4 text-sm">
 										<div className="flex items-center gap-1">
 											<User size={16} />
 											<span>
@@ -330,16 +311,8 @@ export default function CoursePage() {
 													key={trainer.id}
 													className="flex items-start gap-4 p-4 rounded-lg border mb-4"
 												>
-													<div className="h-16 w-16 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center text-gray-500">
-														{trainer.picture ? (
-															<img
-																src={`https://api.smart-fit.uz${trainer.picture}`}
-																alt={trainer.name}
-																className="h-full w-full object-cover"
-															/>
-														) : (
-															<User size={32} />
-														)}
+													<div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden">
+														<User size={32} />
 													</div>
 													<div>
 														<h3 className="font-semibold text-lg">
@@ -359,7 +332,7 @@ export default function CoursePage() {
 
 						{/* Sidebar */}
 						<div className="lg:col-span-1">
-							<Card className="sticky top-20">
+							<Card className="sticky top-8">
 								<CardHeader>
 									<CardTitle>
 										{course.is_enrolled
@@ -390,14 +363,13 @@ export default function CoursePage() {
 											{t("continue_learning")}
 										</Button>
 									) : (
-										<Dialog
-											open={contactModalOpen}
-											onOpenChange={setContactModalOpen}
+										<Button
+											className="w-full"
+											onClick={handleEnrollment}
+											disabled={isEnrolling}
 										>
-											<Button onClick={handleEnrollCourse} className="w-full">
-												{t("enroll_now")}
-											</Button>
-										</Dialog>
+											{isEnrolling ? t("processing") : t("enroll_now")}
+										</Button>
 									)}
 
 									<div className="space-y-3 text-sm">
